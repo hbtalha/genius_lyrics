@@ -85,14 +85,11 @@ void main(List<String> args) async {
   Album? album = (await genius.searchAlbum(name: 'The Off-Season', artist: 'J.Cole'));
   album?.saveLyrics(destPath: 'D:/Desktop/test');
 
-  if (album != null) {
-    int d = album.tracks.length;
-    if (album.tracks != null) {
+  if (album != null) {    
       print(album.tracks.length);
       for (var track in album.tracks) {
         print(track.title);
-      }
-    }
+      }    
   }
 
   Song? song = (await genius.searchSong(artist: 'J. Cole', title: 'KOD'));
