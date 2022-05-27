@@ -139,7 +139,7 @@ class Genius {
       SongsSorting sort = SongsSorting.title}) async {
     return _request(
         uri:
-            'https://api.genius.com/artists/$artistId/songs?sort=${sort.name}&$perPage=20&page=$page&access_token=$accessToken');
+            'https://api.genius.com/artists/$artistId/songs?sort=${sort.name}&perPage=$perPage&page=$page&access_token=$accessToken');
   }
 
   Future<List<dynamic>?> artistSongs(
