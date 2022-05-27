@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 enum SongsSorting { popularity, title, release_date }
 
 class Genius {
-  String? accessToken;
+  String accessToken;
   bool verbose;
   bool skipNonSongs;
   Genius({required this.accessToken, this.verbose = true, this.skipNonSongs = true});
