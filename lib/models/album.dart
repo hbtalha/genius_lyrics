@@ -47,7 +47,16 @@ class Album {
   ///Given the `destPath` (destination path), each track lyrics will be saved in that location with the track title as the filename
   ///
   ///`destPath` must have '/' as separator
-  Future<void> saveLyrics({required String destPath, String ext = '.lrc', bool overwite = true, bool verbose = true}) async {
-    saveLyricsOfMultipleSongs(songs: tracks, destPath: destPath, ext: ext, overwite: overwite, verbose: verbose);
+  Future<void> saveLyrics(
+      {required String destPath,
+      String ext = '.lrc',
+      bool overwite = true,
+      bool verbose = true}) async {
+    saveLyricsOfMultipleSongs(
+        songs: tracks,
+        destPath: destPath,
+        ext: ext,
+        overwite: overwite,
+        verbose: verbose);
   }
 }

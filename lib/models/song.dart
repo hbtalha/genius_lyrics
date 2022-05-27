@@ -110,7 +110,14 @@ class Song {
   /// Save the lyrics of the song in a filename given by `fileName`
   ///
   /// `fileName` must have '/' as separator
-  Future<void> saveLyrics({required String fileName, bool overwite = true, bool verbose = true}) async {
-    writeTofile(fileName: fileName, data: lyrics ?? '', overwite: overwite, verbose: verbose);
+  Future<void> saveLyrics(
+      {required String fileName,
+      bool overwite = true,
+      bool verbose = true}) async {
+    writeTofile(
+        fileName: fileName,
+        data: lyrics ?? '',
+        overwite: overwite,
+        verbose: verbose);
   }
 }

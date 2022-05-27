@@ -15,7 +15,7 @@ class Stats {
     _transcribers = stats["transcribers"];
     _unreviewedAnnotations = stats["unreviewed_annotations"];
     _verifiedAnnotations = stats["verified_annotations"];
-    _hot = stats["hot"] ;
+    _hot = stats["hot"];
     _pageviews = stats["pageviews"];
   }
 
