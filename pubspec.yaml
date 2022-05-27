@@ -1,5 +1,5 @@
 name: genius_lyrics
-description: A new Flutter package project.
+description: Download song lyrics and metadata from Genius.com
 version: 0.0.1
 homepage: null
 
