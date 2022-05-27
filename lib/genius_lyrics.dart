@@ -19,6 +19,7 @@ class Genius {
       this.verbose = true,
       this.skipNonSongs = true});
 
+  /// Shows `errorMsg`(error message) if `verbose` is true and returns null
   dynamic _error(String errorMsg) {
     if (verbose) {
       // ignore: avoid_print
@@ -27,6 +28,7 @@ class Genius {
     return null;
   }
 
+  /// Returns the resulf of the GET request
   Future<Map<String, dynamic>?> _request({required String uri}) async {
     try {
       String getResponse =
@@ -37,6 +39,21 @@ class Genius {
     }
   }
 
+  ///Gets the desired item from the search results.
+  ///
+  /// This method tries to match the `hits` of the `response` to
+  /// the `response_term`, and if it finds no match, returns the first
+  /// appropriate hit if there are any.
+  ///
+  /// Args:
+  ///
+  /// `response`: A response from `Genius._searchAll` to go through.
+  ///
+  /// `searchTerm`: The search term to match with the hit.
+  ///
+  /// `type`: Type of the hit we're looking for (e.g. song, artist).
+  ///
+  /// `resultType`: The part of the hit we want to match  (e.g. song title, artist's name).
   Future<Map<String, dynamic>?> _getItemFromSearchResponse(
       {required Map<String, dynamic> response,
       required String searchTerm,
@@ -91,10 +108,16 @@ class Genius {
     return jsonDecode(hits[0]['result']);
   }
 
+  /// Searches all types.
+  ///
+  /// Including: albums, articles, lyrics, songs, users and videos.
+  ///
+  /// Note: This method will also return a ``top hits`` section alongside other types.
   Future<Map<String, dynamic>?> _searchAll({required String searchTerm}) async {
     return _request(uri: 'https://genius.com/api/search/multi?q=$searchTerm');
   }
 
+  ///Gets data for a specific song given is id (`songId`).
   Future<Map<String, dynamic>?> song({required int songId}) async {
     return _request(
         uri:
