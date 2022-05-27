@@ -28,6 +28,11 @@ Future<void> writeTofile(
   }
 }
 
+/// Save the lyrics of all the songs present in `songs`
+///
+///Given the `destPath` (destination path), each lyrics file will be saved in that location with the song title as the filename
+///
+///`destPath` must have '/' as separator
 Future<void> saveLyricsOfMultipleSongs(
     {required List<Song> songs,
     required String destPath,
