@@ -76,7 +76,6 @@ void main(List<String> args) async {
 
   Artist? artist = await genius.searchArtist(artistName: 'Eminem', maxSongs: 5, sort: SongsSorting.release_date, includeFeatures: true);
 
-
   if (artist != null) {
     for (var song in artist.songs) {
       print(song.title);
@@ -106,4 +105,4 @@ void main(List<String> args) async {
 
 
 ## Contributing
-Please contribute! If you want to fix a bug, suggest improvements, or add new features to the project, just [open an issue]([https://github.com/johnwmillr/LyricsGenius/issues](https://github.com/hbtalha/genius_lyrics/issues/new)) or send me a pull request.
+Please contribute! If you want to fix a bug, suggest improvements, or add new features to the project, just [open an issue](https://github.com/hbtalha/genius_lyrics/issues/new) or send me a pull request.
