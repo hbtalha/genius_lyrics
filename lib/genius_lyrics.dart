@@ -215,7 +215,7 @@ class Genius {
   /// Gets album's tracks.
   ///
   /// `per_page` specifies of results to return per request. It can't be more than 50.
-  Future<List<dynamic>>? albumTracks(
+  Future<List<dynamic>?> albumTracks(
       {required int albumId, required int perPage, required int page}) async {
     return (await _albumTracksPage(
         albumId: albumId, perPage: perPage, page: page))?['tracks'];
