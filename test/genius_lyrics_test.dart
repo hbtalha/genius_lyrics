@@ -30,7 +30,7 @@ void main() {
     expect(album?.artist?.name, equals('Eminem'));
     expect(album?.fullTitle, equals("Recovery by Eminem"));
     expect(album?.name, equals('Recovery'));
-    expect(album?.tracks.length, equals(20));
+    expect(album?.tracks.length, equals(19));
     expect(album?.tracks.any((element) => element.title == 'No Love'),
         equals(true));
 
