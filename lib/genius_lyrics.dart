@@ -18,6 +18,7 @@ class Genius {
 
   dynamic _error(String errorMsg) {
     if (verbose) {
+      // ignore: avoid_print
       print(errorMsg);
     }
     return null;
