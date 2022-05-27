@@ -33,7 +33,7 @@ class Genius {
     try {
       String getResponse =
           (await http.get(Uri.parse(Uri.encodeFull(uri)))).body;
-      return jsonDecode(getResponse);
+      return (jsonDecode(getResponse) as Map<String, dynamic>?)?['response'];
     } catch (e) {
       return null;
     }
@@ -119,48 +119,56 @@ class Genius {
 
   ///Gets data for a specific song given is id (`songId`).
   Future<Map<String, dynamic>?> song({required int songId}) async {
-    return _request(
-        uri:
-            'https://api.genius.com/songs/$songId?text_format=plain&access_token=$accessToken');
+    return (await _request(
+            uri:
+                'https://api.genius.com/songs/$songId?text_format=plain&access_token=$accessToken'))?[
+        'song'];
   }
 
   Future<Map<String, dynamic>?> artist({required int artistId}) async {
-    return _request(
-        uri:
-            'https://api.genius.com/artists/$artistId?text_format=plain&access_token=$accessToken');
+    return (await _request(
+            uri:
+                'https://api.genius.com/artists/$artistId?text_format=plain&access_token=$accessToken'))?[
+        'artist'];
   }
 
-  Future<Map<String, dynamic>?> artistSongs(
+  Future<Map<String, dynamic>?> _artistSongsPage(
       {required int artistId,
       required int perPage,
       required int page,
       SongsSorting sort = SongsSorting.title}) async {
-    try {
-      String getResponse = (await http.get(Uri.parse(Uri.encodeFull(
-              'https://api.genius.com/artists/$artistId/songs?sort=${sort.name}&$perPage=20&page=$page&access_token=$accessToken'))))
-          .body;
-      return jsonDecode(getResponse);
-    } catch (e) {
-      return null;
-    }
+    return _request(
+        uri:
+            'https://api.genius.com/artists/$artistId/songs?sort=${sort.name}&$perPage=20&page=$page&access_token=$accessToken');
+  }
+
+  Future<List<dynamic>?> artistSongs(
+      {required int artistId,
+      required int perPage,
+      required int page,
+      SongsSorting sort = SongsSorting.title}) async {
+    return (await _artistSongsPage(
+        artistId: artistId, perPage: perPage, page: page))?['songs'];
   }
 
   Future<Map<String, dynamic>?> album({required int albumId}) async {
-    return _request(
-        uri:
-            'https://api.genius.com/albums/$albumId?text_format=plain&access_token=$accessToken');
+    return (await _request(
+            uri:
+                'https://api.genius.com/albums/$albumId?text_format=plain&access_token=$accessToken'))?[
+        'album'];
   }
 
-  Future<Map<String, dynamic>?> albumTracks(
+  Future<Map<String, dynamic>?> _albumTracksPage(
       {required int albumId, required int perPage, required int page}) async {
-    try {
-      String getResponse = (await http.get(Uri.parse(Uri.encodeFull(
-              'https://api.genius.com/albums/$albumId/tracks?per_page=$perPage&page=$page&text_format=plain&access_token=$accessToken'))))
-          .body;
-      return jsonDecode(getResponse);
-    } catch (e) {
-      return null;
-    }
+    return await _request(
+        uri:
+            'https://api.genius.com/albums/$albumId/tracks?per_page=$perPage&page=$page&text_format=plain&access_token=$accessToken');
+  }
+
+  Future<List<dynamic>>? albumTracks(
+      {required int albumId, required int perPage, required int page}) async {
+    return (await _albumTracksPage(
+        albumId: albumId, perPage: perPage, page: page))?['tracks'];
   }
 
   Future<String?> lyrics({required String url}) async {
@@ -211,10 +219,10 @@ class Genius {
 
       if (songId != null) {
         getFullInfo = false;
-        songInfo = (await song(songId: songId))?['response']['song'];
+        songInfo = (await song(songId: songId));
       } else {
         Map<String, dynamic>? serachResponse =
-            (await _searchAll(searchTerm: '$title $artist'))?['response'];
+            (await _searchAll(searchTerm: '$title $artist'));
 
         if (serachResponse != null) {
           songInfo = await _getItemFromSearchResponse(
@@ -236,15 +244,12 @@ class Genius {
       songId = songInfo['id'];
 
       if (songId != null && getFullInfo) {
-        Map<String, dynamic>? fullSong = await song(songId: songId);
-        if (fullSong != null) {
-          var fullSongInfo =
-              (fullSong['response']['song'] as Map<String, dynamic>?);
-          if (fullSongInfo == null) {
-            _error('error getting full song info');
-          } else {
-            songInfo = fullSongInfo;
-          }
+        Map<String, dynamic>? fullSongInfo = await song(songId: songId);
+
+        if (fullSongInfo != null) {
+          songInfo = fullSongInfo;
+        } else {
+          _error('error getting full song info');
         }
       }
 
@@ -297,7 +302,7 @@ class Genius {
       albumInfo = await album(albumId: albumId);
     } else {
       Map<String, dynamic>? response =
-          (await _searchAll(searchTerm: '$name $artist'))?['response'];
+          (await _searchAll(searchTerm: '$name $artist'));
 
       if (response != null) {
         albumInfo = (await _getItemFromSearchResponse(
@@ -323,13 +328,13 @@ class Genius {
 
     while (nextPage != null) {
       Map<String, dynamic>? albumTracksResponse =
-          await albumTracks(albumId: albumId, perPage: 50, page: nextPage);
+          await _albumTracksPage(albumId: albumId, perPage: 50, page: nextPage);
 
       if (albumTracksResponse == null) {
         return _error('Error getting album tracks. Rejecting.');
       }
 
-      List<dynamic>? trakList = await albumTracksResponse['response']['tracks'];
+      List<dynamic>? trakList = await albumTracksResponse['tracks'];
 
       if (trakList != null) {
         for (var track in trakList) {
@@ -354,15 +359,11 @@ class Genius {
     }
 
     if (getFullInfo) {
-      Map<String, dynamic>? fullAlbum = await album(albumId: albumId);
-      if (fullAlbum != null) {
-        var fullAlbumInfo =
-            (fullAlbum['response']['album'] as Map<String, dynamic>?);
-        if (fullAlbumInfo == null) {
-          _error('error getting full album info');
-        } else {
-          albumInfo = fullAlbumInfo;
-        }
+      Map<String, dynamic>? fullAlbumInfo = await album(albumId: albumId);
+      if (fullAlbumInfo != null) {
+        albumInfo = fullAlbumInfo;
+      } else {
+        _error('error getting full album info');
       }
     }
 
@@ -410,7 +411,7 @@ class Genius {
       _error('Searching for songs by $artistName');
 
       Map<String, dynamic>? response =
-          (await _searchAll(searchTerm: artistName))?['response'];
+          (await _searchAll(searchTerm: artistName));
 
       if (response != null) {
         artistId = (await _getItemFromSearchResponse(
@@ -425,8 +426,7 @@ class Genius {
       return _error("No results found for $artistName");
     }
 
-    Map<String, dynamic>? artistInfo =
-        (await artist(artistId: artistId))?['response']['artist'];
+    Map<String, dynamic>? artistInfo = (await artist(artistId: artistId));
 
     if (artistInfo == null) {
       return _error("No results found for the artist");
@@ -444,15 +444,14 @@ class Genius {
       bool reachedMaxSongs = (maxSongs == 0) ? true : false;
 
       while (!reachedMaxSongs) {
-        Map<String, dynamic>? artistSongsResponse = await artistSongs(
+        Map<String, dynamic>? artistSongsResponse = await _artistSongsPage(
             artistId: artistId, perPage: perPage, page: page!, sort: sort);
 
         if (artistSongsResponse == null) {
           return _error('Error getting artist songs. Rejecting.');
         }
 
-        List<dynamic>? songsOnPage =
-            await artistSongsResponse['response']['songs'];
+        List<dynamic>? songsOnPage = await artistSongsResponse['songs'];
 
         if (songsOnPage != null) {
           for (var songInfo in songsOnPage) {
@@ -473,18 +472,9 @@ class Genius {
 
               if (getFullInfo) {
                 if (songInfo['id'] != null) {
-                  Map<String, dynamic>? fullSong =
+                  Map<String, dynamic>? fullSongInfo =
                       await song(songId: songInfo['id']);
-                  if (fullSong != null) {
-                    Map<String, dynamic>? fullSongInfo =
-                        (fullSong['response']['song'] as Map<String, dynamic>?);
-                    if (fullSongInfo == null) {
-                      _error(
-                          'error getting full song info for ${songInfo['title'] ?? 'a song'}');
-                    } else {
-                      songInfo = fullSongInfo;
-                    }
-                  }
+                  songInfo = fullSongInfo;
                 } else {
                   _error(
                       'error getting full song info for ${songInfo['title'] ?? 'a song'}');
