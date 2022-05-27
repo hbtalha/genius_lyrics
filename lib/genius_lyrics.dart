@@ -118,6 +118,18 @@ class Genius {
   }
 
   ///Gets data for a specific song given is id (`songId`).
+  ///
+  ///Example:
+  /// {@tool snippet}
+  ///
+  /// ```dart
+  ///Genius genius = Genius(accessToken: TOKEN);
+  ///Map<String, dynamic>? song = await genius.song(songId: 90480);
+  ///if (song != null) {
+  ///  print(song['full_title']);
+  ///}
+  /// ```
+  /// {@end-tool}
   Future<Map<String, dynamic>?> song({required int songId}) async {
     return (await _request(
             uri:
@@ -125,6 +137,19 @@ class Genius {
         'song'];
   }
 
+  ///Gets data for a specific artist given is id (`artistId`).
+  ///
+  ///Example:
+  /// {@tool snippet}
+  ///
+  /// ```dart
+  ///Genius genius = Genius(accessToken: TOKEN);
+  ///Map<String, dynamic>? artist = await genius.artist(artistId: 45);
+  ///if (artist != null) {
+  ///  print(artist['name']);
+  ///}
+  /// ```
+  /// {@end-tool}
   Future<Map<String, dynamic>?> artist({required int artistId}) async {
     return (await _request(
             uri:
@@ -132,6 +157,9 @@ class Genius {
         'artist'];
   }
 
+  /// Returns the page with artist songs given a `artistId`
+  ///
+  /// `per_page` specifies of results to return per request. It can't be more than 50.
   Future<Map<String, dynamic>?> _artistSongsPage(
       {required int artistId,
       required int perPage,
@@ -142,6 +170,9 @@ class Genius {
             'https://api.genius.com/artists/$artistId/songs?sort=${sort.name}&perPage=$perPage&page=$page&access_token=$accessToken');
   }
 
+  /// Gets artist's songs.
+  ///
+  /// `per_page` specifies of results to return per request. It can't be more than 50.
   Future<List<dynamic>?> artistSongs(
       {required int artistId,
       required int perPage,
@@ -151,6 +182,19 @@ class Genius {
         artistId: artistId, perPage: perPage, page: page))?['songs'];
   }
 
+  ///Gets data for a specific album given is id (`albumId`).
+  ///
+  ///Example:
+  /// {@tool snippet}
+  ///
+  /// ```dart
+  ///Genius genius = Genius(accessToken: TOKEN);
+  ///Map<String, dynamic>? album = await genius.album(albumId: 45);
+  ///if (album != null) {
+  ///  print(album['name']);
+  ///}
+  /// ```
+  /// {@end-tool}
   Future<Map<String, dynamic>?> album({required int albumId}) async {
     return (await _request(
             uri:
@@ -158,6 +202,9 @@ class Genius {
         'album'];
   }
 
+  /// Returns the page with album tracks given a `albumId`
+  ///
+  /// `per_page` specifies of results to return per request. It can't be more than 50.
   Future<Map<String, dynamic>?> _albumTracksPage(
       {required int albumId, required int perPage, required int page}) async {
     return await _request(
@@ -165,12 +212,16 @@ class Genius {
             'https://api.genius.com/albums/$albumId/tracks?per_page=$perPage&page=$page&text_format=plain&access_token=$accessToken');
   }
 
+  /// Gets album's tracks.
+  ///
+  /// `per_page` specifies of results to return per request. It can't be more than 50.
   Future<List<dynamic>>? albumTracks(
       {required int albumId, required int perPage, required int page}) async {
     return (await _albumTracksPage(
         albumId: albumId, perPage: perPage, page: page))?['tracks'];
   }
 
+  /// Uses beautiful_soup to scrape song info off of a Genius song URL
   Future<String?> lyrics({required String url}) async {
     String getResponse = (await http.get(Uri.parse(Uri.encodeFull(url)))).body;
 
