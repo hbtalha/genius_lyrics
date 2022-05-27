@@ -16,6 +16,13 @@ class Genius {
   bool skipNonSongs;
   Genius({required this.accessToken, this.verbose = true, this.skipNonSongs = true});
 
+  dynamic _error(String errorMsg) {
+    if (verbose) {
+      print(errorMsg);
+    }
+    return null;
+  }
+
   Future<Map<String, dynamic>?> _request({required String uri}) async {
     try {
       String getResponse = (await http.get(Uri.parse(Uri.encodeFull(uri)))).body;
@@ -23,13 +30,6 @@ class Genius {
     } catch (e) {
       return null;
     }
-  }
-
-  dynamic _error(String errorMsg) {
-    if (verbose) {
-      print(errorMsg);
-    }
-    return null;
   }
 
   Future<Map<String, dynamic>?> _getItemFromSearchResponse(
