@@ -7,6 +7,7 @@ class Album {
   Artist? _artist;
   List<Song> _tracks = [];
   String? _apiPath;
+  int? _id;
   String? _url;
   String? _name;
   String? _fullTitle;
@@ -18,6 +19,7 @@ class Album {
     _artist = Artist(artistInfo: albumInfo['artist']);
     _tracks = tracks;
     _url = albumInfo['url'];
+    _id = albumInfo['id'];
     _name = albumInfo['name'];
     _fullTitle = albumInfo['full_title'];
     _coverArtUrl = albumInfo['cover_art_url'];
@@ -39,6 +41,8 @@ class Album {
   String? get coverArtUrl => _coverArtUrl;
 
   String? get url => _url;
+
+  int? get id => _id;
 
   String? get name => _name;
 
