@@ -57,4 +57,58 @@ void main() {
     expect(artist?.id, equals(1421));
     expect(artist?.songs.length, equals(5));
   });
+
+  test('Testing getting album tracks',
+      timeout: const Timeout(Duration(minutes: 1)), () async {
+    List<dynamic>? trakList =
+        await genius.albumTracks(albumId: 2876, perPage: 50, page: 1);
+    List<Song> tracks = [];
+
+    if (trakList != null) {
+      for (var track in trakList) {
+        Map<String, dynamic>? songInfo =
+            (track['song'] as Map<String, dynamic>?);
+        if (songInfo != null) {
+          String? songLyrics;
+          if (songInfo['lyrics_state'] == 'complete' &&
+              songInfo['url'] != null) {
+            songLyrics = await genius.lyrics(url: songInfo['url']);
+          } else {
+            songLyrics = "";
+          }
+          tracks.add(Song(songInfo: songInfo, lyrics: songLyrics ?? ''));
+        }
+      }
+    }
+
+    expect(tracks.length, equals(19));
+    expect(tracks.any((element) => element.title == 'No Love'), equals(true));
+    expect(tracks.any((element) => element.artist == 'Eminem'), equals(true));
+    expect(tracks.any((element) => element.lyrics!.isNotEmpty), equals(true));
+
+    trakList = await genius.albumTracks(albumId: 420709, perPage: 50, page: 1);
+    tracks.clear();
+
+    if (trakList != null) {
+      for (var track in trakList) {
+        Map<String, dynamic>? songInfo =
+            (track['song'] as Map<String, dynamic>?);
+        if (songInfo != null) {
+          String? songLyrics;
+          if (songInfo['lyrics_state'] == 'complete' &&
+              songInfo['url'] != null) {
+            songLyrics = await genius.lyrics(url: songInfo['url']);
+          } else {
+            songLyrics = "";
+          }
+          tracks.add(Song(songInfo: songInfo, lyrics: songLyrics ?? ''));
+        }
+      }
+    }
+
+    expect(tracks.length, equals(12));
+    expect(tracks.any((element) => element.title == 'KOD'), equals(true));
+    expect(tracks.any((element) => element.artist == 'J. Cole'), equals(true));
+    expect(tracks.any((element) => element.lyrics!.isNotEmpty), equals(true));
+  });
 }
