@@ -1,3 +1,3 @@
-## 0.0.3
+## 0.0.4
 
-* TODO: Describe initial release.
+* Changes made up to this version are just to better the package scores
