@@ -61,12 +61,16 @@ class Song {
     _url = songInfo['url'];
   }
 
+  /// Returns name of the primary artist
   String? get artist => _artist;
 
   List<String> get featuredArtists => _featuredArtists;
 
   String? get lyrics => _lyrics;
 
+  /// Return an [Artist] object
+  /// 
+  /// Note that this [Artist] object does not contain any artist song
   Artist? get primaryArtist => _primaryArtist;
 
   Stats? get stats => _stats;
@@ -105,6 +109,7 @@ class Song {
 
   String? get releaseDateForDisplay => _releaseDateForDisplay;
 
+  /// Returns song data and this data have some fields that are not present in the [Song]
   Map<String, dynamic>? get toJson => _songInfo;
 
   /// Save the lyrics of the song in a filename given by `fileName`
