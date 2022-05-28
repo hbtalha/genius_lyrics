@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:genius_lyrics/models/song.dart';
 
+/// Write [String] data to file given a `fileName`
 Future<void> writeTofile(
     {required String fileName,
     required String data,
