@@ -11,7 +11,7 @@ class Album {
   String? _url;
   String? _name;
   String? _fullTitle;
-  String? __coverAartThumbnailrl;
+  String? _coverAartThumbnailrl;
   String? _coverArtUrl;
 
   Album({required Map<String, dynamic> albumInfo, required List<Song> tracks}) {
@@ -23,7 +23,7 @@ class Album {
     _name = albumInfo['name'];
     _fullTitle = albumInfo['full_title'];
     _coverArtUrl = albumInfo['cover_art_url'];
-    __coverAartThumbnailrl = albumInfo['cover_art_thumbnail_url'];
+    _coverAartThumbnailrl = albumInfo['cover_art_thumbnail_url'];
   }
 
   /// returns song data and this data have some fields that are not present in the [Album]
@@ -37,7 +37,7 @@ class Album {
 
   String? get fullTitle => _fullTitle;
 
-  String? get coverAartThumbnailrl => __coverAartThumbnailrl;
+  String? get coverAartThumbnailrl => _coverAartThumbnailrl;
 
   String? get coverArtUrl => _coverArtUrl;
 
