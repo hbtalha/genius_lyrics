@@ -3,7 +3,7 @@ import 'package:genius_lyrics/models/song.dart';
 import 'package:genius_lyrics/utils.dart';
 
 class Album {
-  Map<String, dynamic>? _albumInfo;
+  Map<String, dynamic> _albumInfo = {};
   Artist? _artist;
   List<Song> _tracks = [];
   String? _apiPath;
@@ -27,7 +27,7 @@ class Album {
   }
 
   /// returns song data and this data have some fields that are not present in the [Album]
-  Map<String, dynamic>? get toJson => _albumInfo;
+  Map<String, dynamic> get toJson => _albumInfo;
 
   Artist? get artist => _artist;
 

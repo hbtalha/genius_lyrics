@@ -26,7 +26,7 @@ class Song {
   String? _url;
   String? _releaseDate;
   String? _releaseDateForDisplay;
-  Map<String, dynamic>? _songInfo;
+  Map<String, dynamic> _songInfo = {};
 
   Song({required Map<String, dynamic> songInfo, required String lyrics}) {
     _songInfo = songInfo;
@@ -110,7 +110,7 @@ class Song {
   String? get releaseDateForDisplay => _releaseDateForDisplay;
 
   /// Returns song data and this data have some fields that are not present in the [Song]
-  Map<String, dynamic>? get toJson => _songInfo;
+  Map<String, dynamic> get toJson => _songInfo;
 
   /// Save the lyrics of the song in a filename given by `fileName`
   ///
