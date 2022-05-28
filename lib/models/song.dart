@@ -69,7 +69,7 @@ class Song {
   String? get lyrics => _lyrics;
 
   /// Return an [Artist] object
-  /// 
+  ///
   /// Note that this [Artist] object does not contain any artist song
   Artist? get primaryArtist => _primaryArtist;
 
