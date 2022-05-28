@@ -1,3 +1,3 @@
-## 0.0.4
+## 0.0.5
 
 * Changes made up to this version are just to better the package scores
