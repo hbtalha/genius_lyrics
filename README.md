@@ -2,6 +2,8 @@
 
 `genius_lyrics` provides a simple interface to the song, artist, and lyrics data stored on [Genius.com](https://www.genius.com).
 
+Read the API reference [here](https://pub.dev/documentation/genius_lyrics/latest/).
+
 ## Usage
 Import the package and initiate Genius:
 
