@@ -7,8 +7,10 @@ class Stats {
   int? _verifiedAnnotations = 0;
   bool? _hot = false;
   int? _pageviews = 0;
+  Map<String, dynamic> _stats = {};
 
   Stats({required Map<String, dynamic> stats}) {
+    _stats = stats;
     _acceptedAnnotations = stats["accepted_annotations"];
     _contributors = stats["contributors"];
     _iqEarners = stats["iq_earners"];
@@ -18,6 +20,9 @@ class Stats {
     _hot = stats["hot"];
     _pageviews = stats["pageviews"];
   }
+
+  /// Returns the stats data 
+  Map<String, dynamic> get stats => _stats;
 
   int? get acceptedAnnotations => _acceptedAnnotations;
 
