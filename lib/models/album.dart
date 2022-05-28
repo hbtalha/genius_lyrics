@@ -26,6 +26,7 @@ class Album {
     __coverAartThumbnailrl = albumInfo['cover_art_thumbnail_url'];
   }
 
+  /// returns song data and this data have some fields that are not present in the [Album]
   Map<String, dynamic>? get toJson => _albumInfo;
 
   Artist? get artist => _artist;
