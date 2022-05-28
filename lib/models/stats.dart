@@ -21,7 +21,7 @@ class Stats {
     _pageviews = stats["pageviews"];
   }
 
-  /// Returns the stats data 
+  /// Returns the stats data
   Map<String, dynamic> get stats => _stats;
 
   int? get acceptedAnnotations => _acceptedAnnotations;
