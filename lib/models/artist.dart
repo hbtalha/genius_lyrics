@@ -14,8 +14,10 @@ class Artist {
   String? _url;
   final List<Song> _songs = [];
   int _numSongs = 0;
+  Map<String, dynamic> _artistInfo = {};
 
   Artist({required Map<String, dynamic> artistInfo}) {
+    _artistInfo = artistInfo;
     _apiPath = artistInfo['api_path'];
     _headerImageUrl = artistInfo['header_image_url'];
     _imageUrl = artistInfo['image_url'];
@@ -26,6 +28,9 @@ class Artist {
     _name = artistInfo['name'];
     _url = artistInfo['url'];
   }
+
+  /// Returns song data and this data have some fields that are not present in the [Artist]
+  Map<String, dynamic> get toJson => _artistInfo;
 
   String? get apiPath => _apiPath;
 
