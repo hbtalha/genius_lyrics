@@ -20,7 +20,7 @@ class Genius {
       this.skipNonSongs = true});
 
   /// Shows `errorMsg`(error message) if `verbose` is true and returns null
-  dynamic _error(String errorMsg) {
+  dynamic _verbosePrint(String errorMsg) {
     if (verbose) {
       // ignore: avoid_print
       print(errorMsg);
@@ -265,7 +265,7 @@ class Genius {
       Map<String, dynamic>? songInfo;
 
       if (songId == null && title == null) {
-        return _error('Specified song does not contain lyrics. Rejecting.');
+        return _verbosePrint('Specified song does not contain lyrics. Rejecting.');
       }
 
       if (songId != null) {
@@ -285,11 +285,11 @@ class Genius {
       }
 
       if (songInfo == null) {
-        return _error('No result found');
+        return _verbosePrint('No result found');
       }
 
       if (songInfo['lyrics_state'] != 'complete' && skipNonSongs) {
-        return _error('Specified song does not contain lyrics. Rejecting.');
+        return _verbosePrint('Specified song does not contain lyrics. Rejecting.');
       }
 
       songId = songInfo['id'];
@@ -300,19 +300,19 @@ class Genius {
         if (fullSongInfo != null) {
           songInfo = fullSongInfo;
         } else {
-          _error('error getting full song info');
+          _verbosePrint('error getting full song info');
         }
       }
 
       String? url = (songInfo['url']);
 
       if (url == null) {
-        return _error('Song url not found. Rejecting.');
+        return _verbosePrint('Song url not found. Rejecting.');
       }
 
       return Song(songInfo: songInfo, lyrics: (await lyrics(url: url)) ?? "");
     } catch (e) {
-      return _error('Error: ${e.toString()}');
+      return _verbosePrint('Error: ${e.toString()}');
     }
   }
 
@@ -344,7 +344,7 @@ class Genius {
       String artist = '',
       bool getFullInfo = true}) async {
     if (name == null && albumId == null) {
-      return _error("You must pass either a `name` or an `albumId`.");
+      return _verbosePrint("You must pass either a `name` or an `albumId`.");
     }
 
     Map<String, dynamic>? albumInfo;
@@ -365,13 +365,13 @@ class Genius {
     }
 
     if (albumInfo == null) {
-      return _error('No results for $name $artist. Rejecting.');
+      return _verbosePrint('No results for $name $artist. Rejecting.');
     }
 
     albumId = albumInfo['id'];
 
     if (albumId == null) {
-      return _error('Something wrong with the album id. Rejecting.');
+      return _verbosePrint('Something wrong with the album id. Rejecting.');
     }
 
     List<Song> tracks = [];
@@ -382,7 +382,7 @@ class Genius {
           await _albumTracksPage(albumId: albumId, perPage: 50, page: nextPage);
 
       if (albumTracksResponse == null) {
-        return _error('Error getting album tracks. Rejecting.');
+        return _verbosePrint('Error getting album tracks. Rejecting.');
       }
 
       List<dynamic>? trakList = await albumTracksResponse['tracks'];
@@ -414,7 +414,7 @@ class Genius {
       if (fullAlbumInfo != null) {
         albumInfo = fullAlbumInfo;
       } else {
-        _error('error getting full album info');
+        _verbosePrint('error getting full album info');
       }
     }
 
@@ -459,7 +459,7 @@ class Genius {
       int? artistId,
       bool includeFeatures = false}) async {
     if (artistId == null) {
-      _error('Searching for songs by $artistName');
+      _verbosePrint('Searching for songs by $artistName');
 
       Map<String, dynamic>? response =
           (await _searchAll(searchTerm: artistName));
@@ -474,13 +474,13 @@ class Genius {
     }
 
     if (artistId == null) {
-      return _error("No results found for $artistName");
+      return _verbosePrint("No results found for $artistName");
     }
 
     Map<String, dynamic>? artistInfo = (await artist(artistId: artistId));
 
     if (artistInfo == null) {
-      return _error("No results found for the artist");
+      return _verbosePrint("No results found for the artist");
     }
 
     Artist artistFound = Artist(artistInfo: artistInfo);
@@ -499,7 +499,7 @@ class Genius {
             artistId: artistId, perPage: perPage, page: page!, sort: sort);
 
         if (artistSongsResponse == null) {
-          return _error('Error getting artist songs. Rejecting.');
+          return _verbosePrint('Error getting artist songs. Rejecting.');
         }
 
         List<dynamic>? songsOnPage = await artistSongsResponse['songs'];
@@ -513,7 +513,7 @@ class Genius {
                 songLyrics = await lyrics(url: songInfo['url']);
               } else {
                 if (skipNonSongs) {
-                  _error(
+                  _verbosePrint(
                       "${(songInfo['title'] ?? 'a song')} is not valid. Skipping.");
 
                   continue;
@@ -527,7 +527,7 @@ class Genius {
                       await song(songId: songInfo['id']);
                   songInfo = fullSongInfo;
                 } else {
-                  _error(
+                  _verbosePrint(
                       'error getting full song info for ${songInfo['title'] ?? 'a song'}');
                 }
               }
@@ -540,7 +540,7 @@ class Genius {
 
               reachedMaxSongs = (artistFound.numSongs >= maxSongs);
               if (reachedMaxSongs) {
-                _error('\nReached user-specified song limit ($maxSongs).');
+                _verbosePrint('\nReached user-specified song limit ($maxSongs).');
                 break;
               }
             }
