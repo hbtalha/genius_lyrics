@@ -54,11 +54,11 @@ class Genius {
   /// `type`: Type of the hit we're looking for (e.g. song, artist).
   ///
   /// `resultType`: The part of the hit we want to match  (e.g. song title, artist's name).
-  Future<Map<String, dynamic>?> _getItemFromSearchResponse(
+  Map<String, dynamic>? _getItemFromSearchResponse(
       {required Map<String, dynamic> response,
       required String searchTerm,
       required String type,
-      required String resultType}) async {
+      required String resultType}) {
     List<dynamic> topHits = response['sections'][0]['hits'];
 
     List<Map<String, dynamic>> hits = [];
@@ -276,7 +276,7 @@ class Genius {
             (await _searchAll(searchTerm: '$title $artist'));
 
         if (serachResponse != null) {
-          songInfo = await _getItemFromSearchResponse(
+          songInfo = _getItemFromSearchResponse(
               response: serachResponse,
               searchTerm: title!,
               type: 'song',
@@ -356,11 +356,11 @@ class Genius {
           (await _searchAll(searchTerm: '$name $artist'));
 
       if (response != null) {
-        albumInfo = (await _getItemFromSearchResponse(
+        albumInfo = _getItemFromSearchResponse(
             response: response,
             searchTerm: name!,
             type: 'album',
-            resultType: 'name'));
+            resultType: 'name');
       }
     }
 
@@ -465,11 +465,11 @@ class Genius {
           (await _searchAll(searchTerm: artistName));
 
       if (response != null) {
-        artistId = (await _getItemFromSearchResponse(
+        artistId =  _getItemFromSearchResponse(
             response: response,
             searchTerm: artistName,
             type: 'artist',
-            resultType: 'name'))?['id'];
+            resultType: 'name')?['id'];
       }
     }
 
