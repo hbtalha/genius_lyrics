@@ -226,9 +226,9 @@ class Genius {
     String getResponse = (await http.get(Uri.parse(Uri.encodeFull(url)))).body;
 
     BeautifulSoup bs = BeautifulSoup(getResponse.replaceAll('<br/>', '\n'));
-
-    return bs.find("div", class_: "Lyrics__Root")?.getText() ??
-        bs.find("div", class_: "lyrics")?.getText().trim();
+    String excluded = bs.find("div", class_: "Lyrics__Footer")?.getText().trim()?? '';
+    return (bs.find("div", class_: "Lyrics__Root")?.getText().trim() ??
+        bs.find("div", class_: "lyrics")?.getText().trim())?.replaceAll(excluded, '');
   }
 
   /// Searches for a specific song and gets its lyrics returning [Song] in case it's successful and `null` otherwise .
