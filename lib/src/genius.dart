@@ -229,7 +229,7 @@ class Genius {
         bs.find("div", class_: "Lyrics__Footer")?.getText().trim() ?? '';
 
     return (bs.find("div", class_: "Lyrics__Root")?.getText().trim() ??
-        bs.find("div", class_: "lyrics")?.getText().trim())
+            bs.find("div", class_: "lyrics")?.getText().trim())
         ?.replaceAll(RegExp('You might also like[0-9]+Embed'), '')
         .replaceAll(excludedFooter, '');
   }
@@ -268,7 +268,8 @@ class Genius {
       Map<String, dynamic>? songInfo;
 
       if (songId == null && title == null) {
-        return _verbosePrint('Specified song does not contain lyrics. Rejecting.');
+        return _verbosePrint(
+            'Specified song does not contain lyrics. Rejecting.');
       }
 
       if (songId != null) {
@@ -292,7 +293,8 @@ class Genius {
       }
 
       if (songInfo['lyrics_state'] != 'complete' && skipNonSongs) {
-        return _verbosePrint('Specified song does not contain lyrics. Rejecting.');
+        return _verbosePrint(
+            'Specified song does not contain lyrics. Rejecting.');
       }
 
       songId = songInfo['id'];
@@ -468,7 +470,7 @@ class Genius {
           (await _searchAll(searchTerm: artistName));
 
       if (response != null) {
-        artistId =  _getItemFromSearchResponse(
+        artistId = _getItemFromSearchResponse(
             response: response,
             searchTerm: artistName,
             type: 'artist',
@@ -543,7 +545,8 @@ class Genius {
 
               reachedMaxSongs = (artistFound.numSongs >= maxSongs);
               if (reachedMaxSongs) {
-                _verbosePrint('\nReached user-specified song limit ($maxSongs).');
+                _verbosePrint(
+                    '\nReached user-specified song limit ($maxSongs).');
                 break;
               }
             }
