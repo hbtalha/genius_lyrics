@@ -11,11 +11,11 @@ dependencies:
   beautiful_soup_dart: ^0.2.0
   flutter:
     sdk: flutter
-  http: ^0.13.4
-  test: ^1.21.1
+  http: ^0.13.4  
   universal_io: ^2.0.4
 
 dev_dependencies:
+  test: ^1.21.1
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter

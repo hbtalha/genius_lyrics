@@ -1,6 +1,6 @@
 import 'package:genius_lyrics/models/artist.dart';
 import 'package:genius_lyrics/models/song.dart';
-import 'package:genius_lyrics/utils.dart';
+import 'package:genius_lyrics/src/utils.dart';
 
 class Album {
   Map<String, dynamic> _albumInfo = {};

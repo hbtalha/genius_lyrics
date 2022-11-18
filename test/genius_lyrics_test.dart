@@ -1,9 +1,6 @@
 @Timeout(Duration(seconds: 60))
 import 'package:test/test.dart';
-import 'package:genius_lyrics/models/artist.dart';
 import 'package:genius_lyrics/genius_lyrics.dart';
-import 'package:genius_lyrics/models/album.dart';
-import 'package:genius_lyrics/models/song.dart';
 
 void main() {
   final genius = Genius(accessToken: YOUR_TOKEN, verbose: false);

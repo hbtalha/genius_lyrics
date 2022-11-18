@@ -1,6 +1,6 @@
-import 'package:genius_lyrics/genius_lyrics.dart';
+import 'package:genius_lyrics/src/genius.dart';
 import 'package:genius_lyrics/models/song.dart';
-import 'package:genius_lyrics/utils.dart';
+import 'package:genius_lyrics/src/utils.dart';
 
 class Artist {
   String? _apiPath;
