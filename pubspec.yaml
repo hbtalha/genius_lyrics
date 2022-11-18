@@ -1,6 +1,6 @@
 name: genius_lyrics
 description: Dart native package inspired by LyricsGenius Python library.  genius_lyrics provides a simple interface to the song, artist, and lyrics data stored on Genius.com.
-version: 0.0.7
+version: 0.0.8
 homepage: https://github.com/hbtalha/genius_lyrics
 
 environment:
