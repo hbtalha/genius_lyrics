@@ -15,3 +15,7 @@
 * Project refactor
 * Moved test package to dev_dependencies
 * Remove irrevelant words at the end of some songs lyrics (Thanks TinhHuynh)
+
+## 0.0.9
+
+*Fix 1 insecure link in README
