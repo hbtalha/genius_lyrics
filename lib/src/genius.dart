@@ -52,11 +52,17 @@ class Genius {
   /// `type`: Type of the hit we're looking for (e.g. song, artist).
   ///
   /// `resultType`: The part of the hit we want to match  (e.g. song title, artist's name).
-  Map<String, dynamic>? _getItemFromSearchResponse(
-      {required Map<String, dynamic> response,
-      required String searchTerm,
-      required String type,
-      required String resultType}) {
+  Map<String, dynamic>? _getItemFromSearchResponse({
+    required Map<String, dynamic> response,
+    required String searchTerm,
+    required String type,
+    required String resultType,
+    String? artist,
+  }) {
+    if (type == 'song' && artist == null) {
+      return _verbosePrint("For the [type] 'song', artist must be specified ");
+    }
+
     List<dynamic> topHits = response['sections'][0]['hits'];
 
     List<Map<String, dynamic>> hits = [];
@@ -94,6 +100,15 @@ class Genius {
 
     if (type == 'song' && skipNonSongs) {
       for (var hit in hits) {
+        Map<String, dynamic>? item = hit['result'];
+        if (item != null) {
+          if (item['artist_names'].toString().contains(artist!)) {
+            return item;
+          }
+        }
+      }
+
+      for (var hit in hits) {
         Map<String, dynamic>? song = hit['result'];
         if (song != null) {
           if (song['lyrics_state'] == 'complete') {
@@ -103,7 +118,7 @@ class Genius {
       }
     }
 
-    return jsonDecode(hits[0]['result']);
+    return hits.isEmpty ? null : jsonDecode(hits[0]['result']);
   }
 
   /// Searches all types.
@@ -281,10 +296,12 @@ class Genius {
 
         if (serachResponse != null) {
           songInfo = _getItemFromSearchResponse(
-              response: serachResponse,
-              searchTerm: title!,
-              type: 'song',
-              resultType: 'title');
+            response: serachResponse,
+            searchTerm: title!,
+            type: 'song',
+            resultType: 'title',
+            artist: artist,
+          );
         }
       }
 
