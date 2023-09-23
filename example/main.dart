@@ -1,7 +1,10 @@
 import 'package:genius_lyrics/genius_lyrics.dart';
+import 'package:genius_lyrics/src/utils.dart';
 
 void main(List<String> args) async {
-  Genius genius = Genius(accessToken: YOUR_TOKEN);
+  String token = await loadEnv();
+
+  Genius genius = Genius(accessToken: token);
 
   Artist? artist = await genius.searchArtist(
       artistName: 'Eminem',
