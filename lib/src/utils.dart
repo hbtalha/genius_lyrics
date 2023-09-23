@@ -11,10 +11,10 @@ Future<void> writeTofile(
   try {
     File file = File(fileName);
 
-    if (await file.exists() && overwite) {
+    if (await file.exists() && !overwite) {
       if (verbose) {
         print(
-            "Skipping $fileName as file already exists and overwrite is true");
+            "Skipping $fileName as file already exists and overwrite is false");
       }
       return;
     }
