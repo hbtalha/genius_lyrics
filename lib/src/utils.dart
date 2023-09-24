@@ -58,5 +58,7 @@ Future<void> saveLyricsOfMultipleSongs(
 Future<String> loadEnv({
   String fileName = '.env',
 }) async {
-  return await File(fileName).readAsString();
+  final String env = await File(fileName).readAsString();
+  final apiToken = env.split('=')[1];
+  return apiToken;
 }
