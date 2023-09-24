@@ -242,7 +242,7 @@ class Genius {
 
     return bs
         .findAll('div', class_: 'Lyrics__Container')
-        .map((e) => e.getText())
+        .map((e) => e.getText().trim())
         .join('\n');
   }
 
