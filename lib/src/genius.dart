@@ -2,6 +2,8 @@ import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:genius_lyrics/models/album.dart';
 import 'package:genius_lyrics/models/artist.dart';
 import 'package:genius_lyrics/models/song.dart';
+import 'package:genius_lyrics/src/api/client.dart';
+import 'package:genius_lyrics/src/api/routes.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -12,10 +14,14 @@ class Genius {
   String accessToken;
   bool verbose;
   bool skipNonSongs;
+  late HttpClient client;
+
   Genius(
       {required this.accessToken,
       this.verbose = true,
-      this.skipNonSongs = true});
+      this.skipNonSongs = true}) {
+    client = HttpClient();
+  }
 
   /// Shows `errorMsg`(error message) if `verbose` is true and returns null
   dynamic _verbosePrint(String errorMsg) {
@@ -24,17 +30,6 @@ class Genius {
       print(errorMsg);
     }
     return null;
-  }
-
-  /// Returns the resulf of the GET request
-  Future<Map<String, dynamic>?> _request({required String uri}) async {
-    try {
-      String getResponse =
-          (await http.get(Uri.parse(Uri.encodeFull(uri)))).body;
-      return (jsonDecode(getResponse) as Map<String, dynamic>?)?['response'];
-    } catch (e) {
-      return null;
-    }
   }
 
   ///Gets the desired item from the search results.
@@ -127,7 +122,8 @@ class Genius {
   ///
   /// Note: This method will also return a ``top hits`` section alongside other types.
   Future<Map<String, dynamic>?> _searchAll({required String searchTerm}) async {
-    return _request(uri: 'https://genius.com/api/search/multi?q=$searchTerm');
+    final String url = '${GeniusRoutes.searchAll}$searchTerm';
+    return client.call(url: url);
   }
 
   ///Gets data for a specific song given is id (`songId`).
@@ -144,10 +140,12 @@ class Genius {
   /// ```
   /// {@end-tool}
   Future<Map<String, dynamic>?> song({required int songId}) async {
-    return (await _request(
-            uri:
-                'https://api.genius.com/songs/$songId?text_format=plain&access_token=$accessToken'))?[
-        'song'];
+    final Map<String, dynamic> query = {
+      'access_token': accessToken,
+      'text_format': 'plain',
+    };
+    final String url = '${GeniusRoutes.getSong}/$songId';
+    return (await client.call(url: url, query: query))?['song'];
   }
 
   ///Gets data for a specific artist given is id (`artistId`).
@@ -164,10 +162,12 @@ class Genius {
   /// ```
   /// {@end-tool}
   Future<Map<String, dynamic>?> artist({required int artistId}) async {
-    return (await _request(
-            uri:
-                'https://api.genius.com/artists/$artistId?text_format=plain&access_token=$accessToken'))?[
-        'artist'];
+    final String url = '${GeniusRoutes.artists}/$artistId';
+    final Map<String, dynamic> query = {
+      'access_token': accessToken,
+      'text_format': 'plain',
+    };
+    return (await client.call(url: url, query: query))?['artist'];
   }
 
   /// Returns the page with artist songs given a `artistId`
@@ -178,9 +178,15 @@ class Genius {
       required int perPage,
       required int page,
       SongsSorting sort = SongsSorting.title}) async {
-    return _request(
-        uri:
-            'https://api.genius.com/artists/$artistId/songs?sort=${sort.name}&perPage=$perPage&page=$page&access_token=$accessToken');
+    final String url = '${GeniusRoutes.artists}/$artistId/songs';
+    final Map<String, dynamic> query = {
+      'sort': sort.name,
+      'perPage': perPage.toString(),
+      'page': page.toString(),
+      'access_token': accessToken,
+    };
+
+    return await client.call(url: url, query: query);
   }
 
   /// Gets artist's songs.
@@ -192,7 +198,10 @@ class Genius {
       required int page,
       SongsSorting sort = SongsSorting.title}) async {
     return (await _artistSongsPage(
-        artistId: artistId, perPage: perPage, page: page))?['songs'];
+      artistId: artistId,
+      perPage: perPage,
+      page: page,
+    ))?['songs'];
   }
 
   ///Gets data for a specific album given is id (`albumId`).
@@ -209,20 +218,30 @@ class Genius {
   /// ```
   /// {@end-tool}
   Future<Map<String, dynamic>?> album({required int albumId}) async {
-    return (await _request(
-            uri:
-                'https://api.genius.com/albums/$albumId?text_format=plain&access_token=$accessToken'))?[
-        'album'];
+    final Map<String, dynamic> query = {
+      'text_format': 'plain',
+      'acess_token': accessToken,
+    };
+    final String url = '${GeniusRoutes.albuns}/$albumId';
+    return (await client.call(url: url, query: query))?['album'];
   }
 
   /// Returns the page with album tracks given a `albumId`
   ///
   /// `per_page` specifies of results to return per request. It can't be more than 50.
-  Future<Map<String, dynamic>?> _albumTracksPage(
-      {required int albumId, required int perPage, required int page}) async {
-    return await _request(
-        uri:
-            'https://api.genius.com/albums/$albumId/tracks?per_page=$perPage&page=$page&text_format=plain&access_token=$accessToken');
+  Future<Map<String, dynamic>?> _albumTracksPage({
+    required int albumId,
+    required int perPage,
+    required int page,
+  }) async {
+    final String url = '${GeniusRoutes.albuns}/$albumId/tracks';
+    final Map<String, dynamic> query = {
+      'per_page': perPage.toString(),
+      'page': page.toString(),
+      'text_format': 'plain',
+      'access_token': accessToken,
+    };
+    return await client.call(url: url, query: query);
   }
 
   /// Gets album's tracks.
@@ -500,7 +519,7 @@ class Genius {
     }
 
     Map<String, dynamic>? artistInfo = (await artist(artistId: artistId));
-
+    print('artist $artistInfo');
     if (artistInfo == null) {
       return _verbosePrint("No results found for the artist");
     }
