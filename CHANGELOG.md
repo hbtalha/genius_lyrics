@@ -18,4 +18,4 @@
 
 ## 0.0.9
 
-*Fix 1 insecure link in README
+* Fix 1 insecure link in README
