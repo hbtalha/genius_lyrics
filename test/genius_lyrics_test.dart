@@ -69,7 +69,7 @@ void main() {
           String? songLyrics;
           if (songInfo['lyrics_state'] == 'complete' &&
               songInfo['url'] != null) {
-            songLyrics = await genius.lyrics(url: songInfo['url']);
+            songLyrics = await Genius.lyrics(url: songInfo['url']);
           } else {
             songLyrics = "";
           }
@@ -94,7 +94,7 @@ void main() {
           String? songLyrics;
           if (songInfo['lyrics_state'] == 'complete' &&
               songInfo['url'] != null) {
-            songLyrics = await genius.lyrics(url: songInfo['url']);
+            songLyrics = await Genius.lyrics(url: songInfo['url']);
           } else {
             songLyrics = "";
           }
