@@ -240,7 +240,10 @@ class Genius {
 
     BeautifulSoup bs = BeautifulSoup(responseBody.replaceAll('<br/>', '\n'));
 
-    return bs.findAll('div', class_: 'Lyrics__Container').map((e) => e.getText()).join('\n');
+    return bs
+        .findAll('div', class_: 'Lyrics__Container')
+        .map((e) => e.getText())
+        .join('\n');
   }
 
   /// Searches for a specific song and gets its lyrics returning [Song] in case it's successful and `null` otherwise .
