@@ -19,3 +19,16 @@
 ## 0.0.9
 
 * Fix 1 insecure link in README
+
+## 1.0.0
+
+* Update packages
+* Fix file overwrite issue
+* Fix file overwrite issue
+* Make function to get lyrics using song url (Genius.lyrics) static
+* Better/more efficient lyrics parsing (fix [#5](https://github.com/hbtalha/genius_lyrics/issues/5))
+* Change versioning
+
+## 1.0.1
+
+* Remove flutter dependency
