@@ -8,11 +8,13 @@ Read the API reference [here](https://pub.dev/documentation/genius_lyrics/latest
 Before using this package you'll need to sign up for a (free) account that authorizes access to [the Genius API](https://genius.com/api-clients). The Genius account provides a `accessToken` that is required by the package. See the [Usage section](https://github.com/hbtalha/genius_lyrics#usage) below for examples.
 
 ## Usage
+After create your geinius account copy the access token and paste at ```.env.example``` file and raname to ```.env```
+
 Import the package and initiate Genius:
 
 ```dart
 import 'package:genius_lyrics/genius_lyrics.dart';
-Genius genius = Genius(accessToken: YOUR_TOKEN);
+Genius genius = Genius();
 ```
 
 Search for songs by a given artist:

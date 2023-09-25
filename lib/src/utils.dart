@@ -51,3 +51,14 @@ Future<void> saveLyricsOfMultipleSongs(
         verbose: verbose);
   }
 }
+
+///
+/// Read the file for the given [fileName] to read genius token
+///
+Future<String> loadEnv({
+  String fileName = '.env',
+}) async {
+  final String env = await File(fileName).readAsString();
+  final apiToken = env.split('=')[1];
+  return apiToken;
+}
