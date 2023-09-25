@@ -253,19 +253,16 @@ class Genius {
         albumId: albumId, perPage: perPage, page: page))?['tracks'];
   }
 
-  /// Uses beautiful_soup to scrape song info off of a Genius song URL
+  /// Uses beautiful_soup to scrape song lyrics off of a Genius song URL
   static Future<String?> lyrics({required String url}) async {
-    String getResponse = (await http.get(Uri.parse(Uri.encodeFull(url)))).body;
+    String responseBody = (await http.get(Uri.parse(Uri.encodeFull(url)))).body;
 
-    BeautifulSoup bs = BeautifulSoup(getResponse.replaceAll('<br/>', '\n'));
+    BeautifulSoup bs = BeautifulSoup(responseBody.replaceAll('<br/>', '\n'));
 
-    String excludedFooter =
-        bs.find("div", class_: "Lyrics__Footer")?.getText().trim() ?? '';
-
-    return (bs.find("div", class_: "Lyrics__Root")?.getText().trim() ??
-            bs.find("div", class_: "lyrics")?.getText().trim())
-        ?.replaceAll(RegExp('You might also like[0-9]+Embed'), '')
-        .replaceAll(excludedFooter, '');
+    return bs
+        .findAll('div', class_: 'Lyrics__Container')
+        .map((e) => e.getText().trim())
+        .join('\n');
   }
 
   /// Searches for a specific song and gets its lyrics returning [Song] in case it's successful and `null` otherwise .

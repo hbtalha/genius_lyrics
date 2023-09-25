@@ -1,11 +1,9 @@
 @Timeout(Duration(seconds: 60))
-import 'package:genius_lyrics/src/utils.dart';
 import 'package:test/test.dart';
 import 'package:genius_lyrics/genius_lyrics.dart';
 
-void main() async {
-  final String token = await loadEnv();
-  final genius = Genius(accessToken: token, verbose: false);
+void main() {
+  final genius = Genius(accessToken: YOUR_TOKEN, verbose: false);
   test('Testing songs search', timeout: const Timeout(Duration(minutes: 1)),
       () async {
     Song? song =

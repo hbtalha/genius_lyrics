@@ -34,3 +34,4 @@ build/
 example/practical_tests.dart
 run_flutter_format.bat
 lyrics.txt
+testDebugFiles/
