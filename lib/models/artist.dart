@@ -11,6 +11,7 @@ class Artist {
   bool? _isMemeVerified;
   bool? _isVerified;
   String? _name;
+  List<String> _alternateNames = [];
   String? _url;
   final List<Song> _songs = [];
   int _numSongs = 0;
@@ -27,6 +28,11 @@ class Artist {
     _isVerified = artistInfo['is_verified'];
     _name = artistInfo['name'];
     _url = artistInfo['url'];
+    if (artistInfo['alternate_names'] != null) {
+      for (var name in artistInfo['alternate_names']) {
+        _alternateNames.add(name);
+      }
+    }
   }
 
   /// Returns song data and this data have some fields that are not present in the [Artist]
@@ -47,6 +53,7 @@ class Artist {
   bool? get isVerified => _isVerified;
 
   String? get name => _name;
+  List<String> get alternateNames => _alternateNames;
 
   String? get url => _url;
 
