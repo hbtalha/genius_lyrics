@@ -2,6 +2,34 @@ import 'package:genius_lyrics/src/genius.dart';
 import 'package:genius_lyrics/models/song.dart';
 import 'package:genius_lyrics/src/utils.dart';
 
+class SocialNetwork {
+  String? instagram;
+  String? facebook;
+  String? twitter;
+
+  SocialNetwork({
+    this.facebook,
+    this.twitter,
+    this.instagram,
+  });
+
+  factory SocialNetwork.fromJson(Map<String, dynamic> json) {
+    return SocialNetwork(
+      instagram: json['instagram_name'],
+      facebook: json['facebook_name'],
+      twitter: json['twitter_name'],
+    );
+  }
+
+  Map<String, String?> toJson() {
+    return {
+      'instagram': instagram,
+      'facebook': facebook,
+      'twitter': twitter,
+    };
+  }
+}
+
 class Artist {
   String? _apiPath;
   String? _headerImageUrl;
@@ -11,6 +39,7 @@ class Artist {
   bool? _isMemeVerified;
   bool? _isVerified;
   String? _name;
+  SocialNetwork? _socialNetwork;
   List<String> _alternateNames = [];
   String? _url;
   final List<Song> _songs = [];
@@ -33,6 +62,7 @@ class Artist {
         _alternateNames.add(name);
       }
     }
+    _socialNetwork = SocialNetwork.fromJson(artistInfo);
   }
 
   /// Returns song data and this data have some fields that are not present in the [Artist]
@@ -60,6 +90,7 @@ class Artist {
   List<Song> get songs => _songs;
 
   int get numSongs => _numSongs;
+  SocialNetwork? get socialNetwork => _socialNetwork;
 
   ///Gets the artist's song return a [Song] in case of success and null otherwise.
   ///

@@ -1,9 +1,13 @@
 @Timeout(Duration(seconds: 60))
+
 import 'package:test/test.dart';
 import 'package:genius_lyrics/genius_lyrics.dart';
 
 void main() {
-  final genius = Genius(accessToken: YOUR_TOKEN, verbose: false);
+  final genius = Genius(
+      accessToken:
+          'ckE_uTwJKT72Bb72p-aKEYKRKp_IZnnWIWa7Md5sJJ3Htb2zDzsK7GhuelvDpn8f',
+      verbose: false);
   test('Testing songs search', timeout: const Timeout(Duration(minutes: 1)),
       () async {
     Song? song =
@@ -39,6 +43,7 @@ void main() {
     expect(album?.tracks.any((element) => element.title == "Kevin’s Heart"),
         equals(true));
   });
+
   test('Testing artist search', timeout: const Timeout(Duration(seconds: 90)),
       () async {
     genius.verbose = true;
@@ -48,7 +53,9 @@ void main() {
     expect(artist?.id, equals(45));
     expect(artist?.songs.length, equals(5));
     expect(artist?.alternateNames.isNotEmpty, equals(true));
-
+    expect(artist?.socialNetwork?.facebook, 'Eminem');
+    expect(artist?.socialNetwork?.instagram, 'eminem');
+    expect(artist?.socialNetwork?.twitter, 'Eminem');
     artist =
         await genius.searchArtist(artistName: 'Kendrick Lamar', maxSongs: 5);
     expect(artist?.name, equals('Kendrick Lamar'));
