@@ -45,6 +45,7 @@ class Artist {
   final List<Song> _songs = [];
   int _numSongs = 0;
   Map<String, dynamic> _artistInfo = {};
+  String? _about;
 
   Artist({required Map<String, dynamic> artistInfo}) {
     _artistInfo = artistInfo;
@@ -63,6 +64,10 @@ class Artist {
       }
     }
     _socialNetwork = SocialNetwork.fromJson(artistInfo);
+    _about = artistInfo['description']?['plain'].toString().replaceAll(
+          '\n\n',
+          '  ',
+        );
   }
 
   /// Returns song data and this data have some fields that are not present in the [Artist]
@@ -88,6 +93,9 @@ class Artist {
   String? get url => _url;
 
   List<Song> get songs => _songs;
+
+  /// return the artist description that is on the artist page on genius
+  String? get about => _about;
 
   int get numSongs => _numSongs;
   SocialNetwork? get socialNetwork => _socialNetwork;
@@ -153,10 +161,11 @@ class Artist {
       bool overwite = true,
       bool verbose = true}) async {
     saveLyricsOfMultipleSongs(
-        songs: songs,
-        destPath: destPath,
-        ext: ext,
-        overwite: overwite,
-        verbose: verbose);
+      songs: songs,
+      destPath: destPath,
+      ext: ext,
+      overwite: overwite,
+      verbose: verbose,
+    );
   }
 }
