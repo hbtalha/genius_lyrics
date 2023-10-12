@@ -2,6 +2,34 @@ import 'package:genius_lyrics/src/genius.dart';
 import 'package:genius_lyrics/models/song.dart';
 import 'package:genius_lyrics/src/utils.dart';
 
+class SocialNetwork {
+  String? instagram;
+  String? facebook;
+  String? twitter;
+
+  SocialNetwork({
+    this.facebook,
+    this.twitter,
+    this.instagram,
+  });
+
+  factory SocialNetwork.fromJson(Map<String, dynamic> json) {
+    return SocialNetwork(
+      instagram: json['instagram_name'],
+      facebook: json['facebook_name'],
+      twitter: json['twitter_name'],
+    );
+  }
+
+  Map<String, String?> toJson() {
+    return {
+      'instagram': instagram,
+      'facebook': facebook,
+      'twitter': twitter,
+    };
+  }
+}
+
 class Artist {
   String? _apiPath;
   String? _headerImageUrl;
@@ -11,10 +39,13 @@ class Artist {
   bool? _isMemeVerified;
   bool? _isVerified;
   String? _name;
+  SocialNetwork? _socialNetwork;
+  List<String> _alternateNames = [];
   String? _url;
   final List<Song> _songs = [];
   int _numSongs = 0;
   Map<String, dynamic> _artistInfo = {};
+  String? _about;
 
   Artist({required Map<String, dynamic> artistInfo}) {
     _artistInfo = artistInfo;
@@ -27,6 +58,16 @@ class Artist {
     _isVerified = artistInfo['is_verified'];
     _name = artistInfo['name'];
     _url = artistInfo['url'];
+    if (artistInfo['alternate_names'] != null) {
+      for (var name in artistInfo['alternate_names']) {
+        _alternateNames.add(name);
+      }
+    }
+    _socialNetwork = SocialNetwork.fromJson(artistInfo);
+    _about = artistInfo['description']?['plain'].toString().replaceAll(
+          '\n\n',
+          '  ',
+        );
   }
 
   /// Returns song data and this data have some fields that are not present in the [Artist]
@@ -47,12 +88,17 @@ class Artist {
   bool? get isVerified => _isVerified;
 
   String? get name => _name;
+  List<String> get alternateNames => _alternateNames;
 
   String? get url => _url;
 
   List<Song> get songs => _songs;
 
+  /// return the artist description that is on the artist page on genius
+  String? get about => _about;
+
   int get numSongs => _numSongs;
+  SocialNetwork? get socialNetwork => _socialNetwork;
 
   ///Gets the artist's song return a [Song] in case of success and null otherwise.
   ///
@@ -115,10 +161,11 @@ class Artist {
       bool overwite = true,
       bool verbose = true}) async {
     saveLyricsOfMultipleSongs(
-        songs: songs,
-        destPath: destPath,
-        ext: ext,
-        overwite: overwite,
-        verbose: verbose);
+      songs: songs,
+      destPath: destPath,
+      ext: ext,
+      overwite: overwite,
+      verbose: verbose,
+    );
   }
 }

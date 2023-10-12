@@ -1,10 +1,16 @@
 import 'package:genius_lyrics/genius_lyrics.dart';
 
 void main(List<String> args) async {
-  Genius genius = Genius(accessToken: YOUR_TOKEN);
+  Genius genius = Genius(
+    accessToken: your_token_here,
+  );
 
   Artist? artist = await genius.searchArtist(
-      artistName: 'Eminem', maxSongs: 5, sort: SongsSorting.release_date, includeFeatures: true);
+    artistName: 'Eminem',
+    maxSongs: 5,
+    sort: SongsSorting.release_date,
+    includeFeatures: true,
+  );
 
   if (artist != null) {
     for (var song in artist.songs) {
@@ -12,7 +18,8 @@ void main(List<String> args) async {
     }
   }
 
-  Album? album = (await genius.searchAlbum(name: 'The Off-Season', artist: 'J.Cole'));
+  Album? album =
+      (await genius.searchAlbum(name: 'The Off-Season', artist: 'J.Cole'));
   album?.saveLyrics(destPath: 'D:/Desktop/test');
 
   if (album != null) {
