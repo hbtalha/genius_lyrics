@@ -118,7 +118,7 @@ class Genius {
       }
     }
 
-    return hits.isEmpty ? null : jsonDecode(hits[0]['result']);
+    return hits.isEmpty ? null : hits[0]['result'];
   }
 
   /// Searches all types.
