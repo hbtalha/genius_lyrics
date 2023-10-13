@@ -58,15 +58,11 @@ class Artist {
     _isVerified = artistInfo['is_verified'];
     _name = artistInfo['name'];
     _url = artistInfo['url'];
-    if (artistInfo['alternate_names'] != null) {
-      for (var name in artistInfo['alternate_names']) {
-        _alternateNames.add(name);
-      }
-    }
+    _alternateNames = List<String>.from(artistInfo['alternate_names'] ?? []);
     _socialNetwork = SocialNetwork.fromJson(artistInfo);
     _about = artistInfo['description']?['plain'];
   }
-  
+
   /// Returns song data and this data have some fields that are not present in the [Artist]
   Map<String, dynamic> get toJson => _artistInfo;
 
