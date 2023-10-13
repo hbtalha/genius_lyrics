@@ -64,11 +64,7 @@ class Artist {
       }
     }
     _socialNetwork = SocialNetwork.fromJson(artistInfo);
-    _about = artistInfo['description']?['plain'].toString().replaceAll(
-          '\n\n',
-          '  ',
-        );
-  }
+    _about = artistInfo['description']?['plain'];
 
   /// Returns song data and this data have some fields that are not present in the [Artist]
   Map<String, dynamic> get toJson => _artistInfo;
