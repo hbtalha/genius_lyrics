@@ -1,11 +1,17 @@
 @Timeout(Duration(seconds: 60))
+
 import 'package:test/test.dart';
 import 'package:genius_lyrics/genius_lyrics.dart';
 
 void main() {
-  final genius = Genius(accessToken: YOUR_TOKEN, verbose: false);
-  test('Testing songs search', timeout: const Timeout(Duration(minutes: 1)), () async {
-    Song? song = await genius.searchSong(artist: 'Kendrick Lamar', title: 'Real');
+  final genius = Genius(
+    accessToken: your_token_here,
+    verbose: false,
+  );
+  test('Testing songs search', timeout: const Timeout(Duration(minutes: 1)),
+      () async {
+    Song? song =
+        await genius.searchSong(artist: 'Kendrick Lamar', title: 'Real');
     expect(song?.artist, equals('Kendrick Lamar'));
     expect(song?.title, equals('Real'));
     expect(song?.id, equals(90480));
@@ -19,44 +25,60 @@ void main() {
     expect(song?.featuredArtists, equals(['Lil Wayne']));
     expect(song?.lyrics?.isEmpty, equals(false));
   });
-  test('Testing album search', timeout: const Timeout(Duration(minutes: 1)), () async {
+  test('Testing album search', timeout: const Timeout(Duration(minutes: 1)),
+      () async {
     Album? album = await genius.searchAlbum(artist: 'Eminem', name: 'Recovery');
     expect(album?.artist?.name, equals('Eminem'));
     expect(album?.fullTitle, equals("Recovery by Eminem"));
     expect(album?.name, equals('Recovery'));
     expect(album?.tracks.length, equals(19));
-    expect(album?.tracks.any((element) => element.title == 'No Love'), equals(true));
+    expect(album?.tracks.any((element) => element.title == 'No Love'),
+        equals(true));
 
     album = await genius.searchAlbum(artist: 'J. Cole', name: 'KOD');
     expect(album?.artist?.name, equals('J. Cole'));
     expect(album?.name, equals('KOD'));
     expect(album?.fullTitle, equals('KOD by J. Cole'));
     expect(album?.tracks.length, equals(12));
-    expect(album?.tracks.any((element) => element.title == "Kevin’s Heart"), equals(true));
+    expect(album?.tracks.any((element) => element.title == "Kevin’s Heart"),
+        equals(true));
   });
-  test('Testing artist search', timeout: const Timeout(Duration(seconds: 90)), () async {
+
+  test('Testing artist search', timeout: const Timeout(Duration(seconds: 90)),
+      () async {
     genius.verbose = true;
-    Artist? artist = await genius.searchArtist(artistName: 'Eminem', maxSongs: 5);
+    Artist? artist =
+        await genius.searchArtist(artistName: 'Eminem', maxSongs: 5);
     expect(artist?.name, equals('Eminem'));
     expect(artist?.id, equals(45));
     expect(artist?.songs.length, equals(5));
+    expect(artist?.alternateNames.isNotEmpty, equals(true));
+    expect(artist?.socialNetwork?.facebook, 'Eminem');
+    expect(artist?.socialNetwork?.instagram, 'eminem');
+    expect(artist?.socialNetwork?.twitter, 'Eminem');
+    expect(artist?.about?.contains('\n'), false);
 
-    artist = await genius.searchArtist(artistName: 'Kendrick Lamar', maxSongs: 5);
+    artist =
+        await genius.searchArtist(artistName: 'Kendrick Lamar', maxSongs: 5);
     expect(artist?.name, equals('Kendrick Lamar'));
     expect(artist?.id, equals(1421));
     expect(artist?.songs.length, equals(5));
   });
 
-  test('Testing getting album tracks', timeout: const Timeout(Duration(minutes: 1)), () async {
-    List<dynamic>? trakList = await genius.albumTracks(albumId: 2876, perPage: 50, page: 1);
+  test('Testing getting album tracks',
+      timeout: const Timeout(Duration(minutes: 1)), () async {
+    List<dynamic>? trakList =
+        await genius.albumTracks(albumId: 2876, perPage: 50, page: 1);
     List<Song> tracks = [];
 
     if (trakList != null) {
       for (var track in trakList) {
-        Map<String, dynamic>? songInfo = (track['song'] as Map<String, dynamic>?);
+        Map<String, dynamic>? songInfo =
+            (track['song'] as Map<String, dynamic>?);
         if (songInfo != null) {
           String? songLyrics;
-          if (songInfo['lyrics_state'] == 'complete' && songInfo['url'] != null) {
+          if (songInfo['lyrics_state'] == 'complete' &&
+              songInfo['url'] != null) {
             songLyrics = await Genius.lyrics(url: songInfo['url']);
           } else {
             songLyrics = "";
@@ -76,10 +98,12 @@ void main() {
 
     if (trakList != null) {
       for (var track in trakList) {
-        Map<String, dynamic>? songInfo = (track['song'] as Map<String, dynamic>?);
+        Map<String, dynamic>? songInfo =
+            (track['song'] as Map<String, dynamic>?);
         if (songInfo != null) {
           String? songLyrics;
-          if (songInfo['lyrics_state'] == 'complete' && songInfo['url'] != null) {
+          if (songInfo['lyrics_state'] == 'complete' &&
+              songInfo['url'] != null) {
             songLyrics = await Genius.lyrics(url: songInfo['url']);
           } else {
             songLyrics = "";

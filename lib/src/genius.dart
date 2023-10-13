@@ -469,14 +469,15 @@ class Genius {
   /// }
   /// ```
   /// {@end-tool}
-  Future<Artist?> searchArtist(
-      {required String artistName,
-      int? maxSongs,
-      SongsSorting sort = SongsSorting.popularity,
-      int perPage = 20,
-      bool getFullInfo = true,
-      int? artistId,
-      bool includeFeatures = false}) async {
+  Future<Artist?> searchArtist({
+    required String artistName,
+    int? maxSongs,
+    SongsSorting sort = SongsSorting.popularity,
+    int perPage = 20,
+    bool getFullInfo = true,
+    int? artistId,
+    bool includeFeatures = false,
+  }) async {
     if (artistId == null) {
       _verbosePrint('Searching for songs by $artistName');
 
