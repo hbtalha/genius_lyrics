@@ -512,7 +512,7 @@ class Genius {
         maxSongs = 50;
       }
 
-      bool reachedMaxSongs = (maxSongs == 0) ? true : false;
+      bool reachedMaxSongs = (maxSongs == 0);
 
       while (!reachedMaxSongs) {
         Map<String, dynamic>? artistSongsResponse = await _artistSongsPage(
