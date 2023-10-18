@@ -119,7 +119,7 @@ class Genius extends HttpClient {
       'q': searchTerm,
     };
     return await makeRequest(
-      url: GeniusRoutes.searchAll,
+      url: searchAllRoute,
       query: query,
       headers: false,
     );
@@ -142,7 +142,7 @@ class Genius extends HttpClient {
   Future<Map<String, dynamic>?> song({required int songId}) async {
     Map<String, dynamic> query = {'text_format': 'plain'};
     return (await makeRequest(
-      url: '${GeniusRoutes.getSong}/$songId',
+      url: '${getSongRoute}/$songId',
       query: query,
     ))?['song'];
   }
@@ -163,7 +163,7 @@ class Genius extends HttpClient {
   Future<Map<String, dynamic>?> artist({required int artistId}) async {
     Map<String, dynamic> query = {'text_format': 'plain'};
     return (await makeRequest(
-      url: '${GeniusRoutes.artists}/$artistId',
+      url: '${artistsRoute}/$artistId',
       query: query,
     ))?['artist'];
   }
@@ -183,7 +183,7 @@ class Genius extends HttpClient {
     };
 
     return (await makeRequest(
-      url: '${GeniusRoutes.artists}/$artistId/songs',
+      url: '${artistsRoute}/$artistId/songs',
       query: query,
     ));
   }
@@ -218,7 +218,7 @@ class Genius extends HttpClient {
       'text_format': 'plain',
     };
     return (await makeRequest(
-      url: '${GeniusRoutes.albuns}/$albumId',
+      url: '${albunsRoute}/$albumId',
       query: query,
     ))?['album'];
   }
@@ -237,7 +237,7 @@ class Genius extends HttpClient {
       'text_format': 'plain',
     };
     return (await makeRequest(
-      url: '${GeniusRoutes.albuns}/$albumId/tracks',
+      url: '${albunsRoute}/$albumId/tracks',
       query: query,
     ));
   }
@@ -253,7 +253,7 @@ class Genius extends HttpClient {
 
   /// Uses beautiful_soup to scrape song lyrics off of a Genius song URL
   Future<String?> lyrics({required String url}) async {
-    String responseBody = await searchLyrics(url: url);
+    String responseBody = await requstBody(url: url);
 
     BeautifulSoup bs = BeautifulSoup(responseBody.replaceAll('<br/>', '\n'));
 
