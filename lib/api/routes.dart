@@ -1,11 +1,7 @@
-class GeniusRoutes {
-  static const String _apiBaseUrl = 'https://api.genius.com';
-  static const String _geniusBaseUrl = 'https://genius.com/api';
+const String _apiRoute = 'https://api.genius.com';
+const String _publicApiRoute = 'https://genius.com/api';
 
-  GeniusRoutes._();
-
-  static String searchAll = '$_geniusBaseUrl/search/multi';
-  static String getSong = '$_apiBaseUrl/songs';
-  static String artists = '$_apiBaseUrl/artists';
-  static String albuns = '$_apiBaseUrl/albums';
-}
+const String searchAllRoute = '$_publicApiRoute/search/multi';
+const String getSongRoute = '$_apiRoute/songs';
+const String artistsRoute = '$_apiRoute/artists';
+const String albunsRoute = '$_apiRoute/albums';
