@@ -1,5 +1,4 @@
-import 'package:genius_lyrics/models/artist.dart';
-import 'package:genius_lyrics/models/stats.dart';
+import 'package:genius_lyrics/models/models.dart';
 import 'package:genius_lyrics/src/utils.dart';
 
 class Song {

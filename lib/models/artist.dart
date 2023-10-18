@@ -1,5 +1,5 @@
+import 'package:genius_lyrics/models/models.dart';
 import 'package:genius_lyrics/src/genius.dart';
-import 'package:genius_lyrics/models/song.dart';
 import 'package:genius_lyrics/src/utils.dart';
 
 class SocialNetwork {

@@ -1,6 +1,5 @@
+import 'package:genius_lyrics/models/models.dart';
 import 'package:universal_io/io.dart';
-
-import 'package:genius_lyrics/models/song.dart';
 
 /// Write [String] data to file given a `fileName`
 Future<void> writeTofile(

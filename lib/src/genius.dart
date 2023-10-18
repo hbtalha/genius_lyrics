@@ -1,8 +1,6 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:genius_lyrics/models/album.dart';
-import 'package:genius_lyrics/models/artist.dart';
-import 'package:genius_lyrics/models/song.dart';
 import 'package:genius_lyrics/api/api.dart';
+import 'package:genius_lyrics/models/models.dart';
 
 // ignore: constant_identifier_names
 enum SongsSorting { popularity, title, release_date }
