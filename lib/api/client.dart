@@ -27,7 +27,7 @@ class HttpClient {
     }
   }
 
-  Future<String> requstBody({required String url}) async {
+  Future<String> requestBody({required String url}) async {
     return (await http.get(_parseUrl(url))).body;
   }
 
