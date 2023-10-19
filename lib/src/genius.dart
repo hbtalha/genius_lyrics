@@ -5,16 +5,19 @@ import 'package:genius_lyrics/models/models.dart';
 // ignore: constant_identifier_names
 enum SongsSorting { popularity, title, release_date }
 
-class Genius extends HttpClient {
+class Genius {
   String accessToken;
   bool verbose;
   bool skipNonSongs;
+  late HttpClient _httpClient;
 
   Genius({
     required this.accessToken,
     this.verbose = true,
     this.skipNonSongs = true,
-  }) : super(accessToken: accessToken);
+  }) {
+    _httpClient = HttpClient(accessToken: accessToken);
+  }
 
   /// Shows `errorMsg`(error message) if `verbose` is true and returns null
   dynamic _verbosePrint(String errorMsg) {
@@ -118,7 +121,7 @@ class Genius extends HttpClient {
     final Map<String, dynamic> query = {
       'q': searchTerm,
     };
-    return await makeRequest(
+    return await _httpClient.makeRequest(
       url: searchAllRoute,
       query: query,
       headers: false,
@@ -141,7 +144,7 @@ class Genius extends HttpClient {
   /// {@end-tool}
   Future<Map<String, dynamic>?> song({required int songId}) async {
     Map<String, dynamic> query = {'text_format': 'plain'};
-    return (await makeRequest(
+    return (await _httpClient.makeRequest(
       url: '${getSongRoute}/$songId',
       query: query,
     ))?['song'];
@@ -162,7 +165,7 @@ class Genius extends HttpClient {
   /// {@end-tool}
   Future<Map<String, dynamic>?> artist({required int artistId}) async {
     Map<String, dynamic> query = {'text_format': 'plain'};
-    return (await makeRequest(
+    return (await _httpClient.makeRequest(
       url: '${artistsRoute}/$artistId',
       query: query,
     ))?['artist'];
@@ -182,7 +185,7 @@ class Genius extends HttpClient {
       'sort': sort.name,
     };
 
-    return (await makeRequest(
+    return (await _httpClient.makeRequest(
       url: '${artistsRoute}/$artistId/songs',
       query: query,
     ));
@@ -217,7 +220,7 @@ class Genius extends HttpClient {
     final Map<String, String> query = {
       'text_format': 'plain',
     };
-    return (await makeRequest(
+    return (await _httpClient.makeRequest(
       url: '${albunsRoute}/$albumId',
       query: query,
     ))?['album'];
@@ -236,7 +239,7 @@ class Genius extends HttpClient {
       'page': page.toString(),
       'text_format': 'plain',
     };
-    return (await makeRequest(
+    return (await _httpClient.makeRequest(
       url: '${albunsRoute}/$albumId/tracks',
       query: query,
     ));
@@ -253,7 +256,7 @@ class Genius extends HttpClient {
 
   /// Uses beautiful_soup to scrape song lyrics off of a Genius song URL
   Future<String?> lyrics({required String url}) async {
-    String responseBody = await requstBody(url: url);
+    String responseBody = await _httpClient.requstBody(url: url);
 
     BeautifulSoup bs = BeautifulSoup(responseBody.replaceAll('<br/>', '\n'));
 
