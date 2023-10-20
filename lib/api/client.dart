@@ -14,7 +14,7 @@ class HttpClient {
   }) async {
     try {
       String result = (await http.get(
-              _parseUrl(
+              parseUrl(
                 url,
                 query: query,
               ),
@@ -27,11 +27,11 @@ class HttpClient {
     }
   }
 
-  Future<String> requestBody({required String url}) async {
-    return (await http.get(_parseUrl(url))).body;
+  static Future<String> requestBody({required String url}) async {
+    return (await http.get(HttpClient.parseUrl(url))).body;
   }
 
-  Uri _parseUrl(
+  static Uri parseUrl(
     String url, {
     Map<String, dynamic>? query,
   }) {

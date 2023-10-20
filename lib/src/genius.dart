@@ -255,8 +255,8 @@ class Genius {
   }
 
   /// Uses beautiful_soup to scrape song lyrics off of a Genius song URL
-  Future<String?> lyrics({required String url}) async {
-    String responseBody = await _httpClient.requestBody(url: url);
+  static Future<String?> lyrics({required String url}) async {
+    String responseBody = await HttpClient.requestBody(url: url);
 
     BeautifulSoup bs = BeautifulSoup(responseBody.replaceAll('<br/>', '\n'));
 
