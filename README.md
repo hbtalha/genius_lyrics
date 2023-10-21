@@ -5,9 +5,11 @@
 Read the API reference [here](https://pub.dev/documentation/genius_lyrics/latest/).
 
 ## Setup
+
 Before using this package you'll need to sign up for a (free) account that authorizes access to [the Genius API](https://genius.com/api-clients). The Genius account provides a `accessToken` that is required by the package. See the [Usage section](https://github.com/hbtalha/genius_lyrics#usage) below for examples.
 
 ## Usage
+
 Import the package and initiate Genius:
 
 ```dart
@@ -25,6 +27,7 @@ if (artist != null) {
   }
 }
 ```
+
 By default, the `searchArtist()` only returns songs where the given artist is the primary artist.
 However, there may be instances where it is desirable to get all of the songs that the artist appears on.
 You can do this by setting the `includeFeatures` argument to `true`.
@@ -74,9 +77,16 @@ album?.saveLyrics(destPath: 'D:/Desktop/test');
 import 'package:genius_lyrics/genius_lyrics.dart';
 
 void main(List<String> args) async {
-  Genius genius = Genius(accessToken: YOUR_TOKEN);
+  Genius genius = Genius(
+    accessToken: const String.fromEnvironment('GENIUS_TOKEN'),
+  );
 
-  Artist? artist = await genius.searchArtist(artistName: 'Eminem', maxSongs: 5, sort: SongsSorting.release_date, includeFeatures: true);
+  Artist? artist = await genius.searchArtist(
+    artistName: 'Eminem',
+    maxSongs: 5,
+    sort: SongsSorting.release_date,
+    includeFeatures: true,
+  );
 
   if (artist != null) {
     for (var song in artist.songs) {
@@ -87,11 +97,11 @@ void main(List<String> args) async {
   Album? album = (await genius.searchAlbum(name: 'The Off-Season', artist: 'J.Cole'));
   album?.saveLyrics(destPath: 'D:/Desktop/test');
 
-  if (album != null) {    
+  if (album != null) {
       print(album.tracks.length);
       for (var track in album.tracks) {
         print(track.title);
-      }    
+      }
   }
 
   Song? song = (await genius.searchSong(artist: 'J. Cole', title: 'KOD'));
@@ -102,6 +112,6 @@ void main(List<String> args) async {
 }
 ```
 
-
 ## Contributing
+
 Please contribute! If you want to fix a bug, suggest improvements, or add new features to the project, just [open an issue](https://github.com/hbtalha/genius_lyrics/issues/new) or send me a pull request.
