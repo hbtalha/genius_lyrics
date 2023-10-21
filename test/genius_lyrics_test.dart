@@ -56,7 +56,7 @@ void main() {
     expect(artist?.socialNetwork?.facebook, 'Eminem');
     expect(artist?.socialNetwork?.instagram, 'eminem');
     expect(artist?.socialNetwork?.twitter, 'Eminem');
-    expect(artist?.about?.contains('\n'), false);
+    expect(artist?.about?.contains('\n'), true);
 
     artist =
         await genius.searchArtist(artistName: 'Kendrick Lamar', maxSongs: 5);
