@@ -112,11 +112,7 @@ void main(List<String> args) async {
 }
 ```
 
-## Contributing
-
-Please contribute! If you want to fix a bug, suggest improvements, or add new features to the project, just [open an issue](https://github.com/hbtalha/genius_lyrics/issues/new) or send me a pull request.
-
-### Environment Variables
+## Environment Variables
 
 To run this project test suit, you need to have your Genius token as an environment variable called `GENIUS_TOKEN`. You can set this in many ways.
 
@@ -156,3 +152,7 @@ It's also possible to add these configurations on your IDE configuration file. H
 ```
 
 Read more about Dart and environment variables [here](https://dart.dev/guides/environment-declarations).
+
+## Contributing
+
+Please contribute! If you want to fix a bug, suggest improvements, or add new features to the project, just [open an issue](https://github.com/hbtalha/genius_lyrics/issues/new) or send me a pull request.
