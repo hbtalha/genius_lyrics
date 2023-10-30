@@ -63,6 +63,12 @@ class Artist {
     _about = artistInfo['description']?['plain'];
   }
 
+  factory Artist.fromJson(Map<String, dynamic> json) {
+    return Artist(
+      artistInfo: json,
+    );
+  }
+
   /// Returns song data and this data have some fields that are not present in the [Artist]
   Map<String, dynamic> get toJson => _artistInfo;
 
@@ -141,6 +147,11 @@ class Artist {
         print("Can't add song by ${newSong.artist}, artist must be $name.");
       }
     }
+  }
+
+  static List<Artist> sortArtists(List<Artist> artists) {
+    artists.sort((first, second) => first.name!.compareTo(second.name!));
+    return artists;
   }
 
   /// Save the lyrics of all the artist songs

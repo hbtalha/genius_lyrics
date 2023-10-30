@@ -594,4 +594,24 @@ class Genius {
     }
     return artistFound;
   }
+
+  Future<List<Hit>> searchArtistHits({
+    required String artistName,
+  }) async {
+    final Map<String, String> query = {'q': artistName};
+
+    var artistHits = <Hit>[];
+
+    var response = await _httpClient.makeRequest(
+      url: artistsHitsRoute,
+      query: query,
+    );
+    var hitsList = response?['hits'];
+
+    for (var hit in hitsList) {
+      artistHits.add(Hit(hit['result']));
+    }
+
+    return artistHits;
+  }
 }
