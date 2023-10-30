@@ -2,14 +2,7 @@ import 'package:genius_lyrics/genius_lyrics.dart';
 
 void main(List<String> args) async {
   Genius genius = Genius(
-    accessToken: YOUR_TOKEN,
-  );
-
-  List<Hit> hits = await genius.searchArtistHits(artistName: 'Emicida');
-
-  Hit.sortHits(
-    hits: hits,
-    sortParamns: SortHitsParamns.byDate,
+    accessToken: const String.fromEnvironment('GENIUS_TOKEN'),
   );
 
   Artist? artist = await genius.searchArtist(
