@@ -29,6 +29,8 @@ void main(List<String> args) async {
     }
   }
 
+  List<Song> hits = await genius.searchArtistHits(artistName: 'J. Cole');
+
   Song? song = (await genius.searchSong(artist: 'J. Cole', title: 'KOD'));
 
   if (song != null) {

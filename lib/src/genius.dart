@@ -595,12 +595,15 @@ class Genius {
     return artistFound;
   }
 
-  Future<List<Hit>> searchArtistHits({
+  ///
+  /// return the most 10 popular's song where given artist is a primary artist
+  ///
+  Future<List<Song>> searchArtistHits({
     required String artistName,
   }) async {
     final Map<String, String> query = {'q': artistName};
 
-    var artistHits = <Hit>[];
+    var artistHits = <Song>[];
 
     var response = await _httpClient.makeRequest(
       url: artistsHitsRoute,
@@ -609,7 +612,7 @@ class Genius {
     var hitsList = response?['hits'];
 
     for (var hit in hitsList) {
-      artistHits.add(Hit(hit['result']));
+      artistHits.add(Song(songInfo: hit['result'], lyrics: ''));
     }
 
     return artistHits;
