@@ -1,6 +1,7 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:genius_lyrics/api/api.dart';
 import 'package:genius_lyrics/models/models.dart';
+import 'package:genius_lyrics/src/utils.dart';
 
 // ignore: constant_identifier_names
 enum SongsSorting { popularity, title, release_date }
@@ -266,13 +267,57 @@ class Genius {
         .join('\n');
   }
 
+  ///Gets Song by retrieving song information based on the given [songInfo] and [getFullInfo] flag.
+  ///
+  /// If the [songInfo] is null, it returns a message indicating 'No result found'.
+  /// If the 'lyrics_state' in the [songInfo] is not 'complete' and skipNonSongs is enabled, it rejects with a message.
+  ///
+  ///
+  /// Args:
+  ///
+  /// `songInfo`: a Map containing the song info, is required.
+  ///
+  /// `getFullInfo`: Get full info for the song (slower).
+  Future<Song?> _getSongFromResponseInfo(
+      {required Map<String, dynamic>? songInfo,
+      required bool getFullInfo}) async {
+    if (songInfo == null) {
+      return _verbosePrint('No result found');
+    }
+
+    if (songInfo['lyrics_state'] != 'complete' && skipNonSongs) {
+      return _verbosePrint(
+          'Specified song does not contain lyrics. Rejecting.');
+    }
+
+    int songId = songInfo['id'];
+
+    if (getFullInfo) {
+      Map<String, dynamic>? fullSongInfo = await song(songId: songId);
+
+      if (fullSongInfo != null) {
+        songInfo = fullSongInfo;
+      } else {
+        _verbosePrint('error getting full song info');
+      }
+    }
+
+    String? url = (songInfo['url']);
+
+    if (url == null) {
+      return _verbosePrint('Song url not found. Rejecting.');
+    }
+
+    return Song(songInfo: songInfo, lyrics: (await lyrics(url: url)) ?? "");
+  }
+
   /// Searches for a specific song and gets its lyrics returning [Song] in case it's successful and `null` otherwise .
   ///
   /// You must pass either a `title` or a `songId`.
   ///
-  ///title: Song title to search for.
-  ///
   ///Args:
+  ///
+  /// `title` Song title to search for.
   ///
   /// `artist` (optional): Name of the artist.
   ///
@@ -331,27 +376,57 @@ class Genius {
             'Specified song does not contain lyrics. Rejecting.');
       }
 
-      songId = songInfo['id'];
-
-      if (songId != null && getFullInfo) {
-        Map<String, dynamic>? fullSongInfo = await song(songId: songId);
-
-        if (fullSongInfo != null) {
-          songInfo = fullSongInfo;
-        } else {
-          _verbosePrint('error getting full song info');
-        }
-      }
-
-      String? url = (songInfo['url']);
-
-      if (url == null) {
-        return _verbosePrint('Song url not found. Rejecting.');
-      }
-
-      return Song(songInfo: songInfo, lyrics: (await lyrics(url: url)) ?? "");
+      return _getSongFromResponseInfo(
+          songInfo: songInfo, getFullInfo: getFullInfo);
     } catch (e) {
       return _verbosePrint('Error: ${e.toString()}');
+    }
+  }
+
+  /// Searches for a song based on the provided [lyricsSnippet] and gets its lyrics returning [Song] in case it's successful and `null` otherwise .
+  ///
+  ///Args:
+  ///
+  /// `lyricsSnippet`: snippet of the lyrics of the song you are searching.
+  ///
+  /// `getFullInfo` (optional): Get full info for each song (slower).
+  ///
+  ///Example:
+  /// {@tool snippet}
+  ///
+  /// ```dart
+  ///Genius genius = Genius(accessToken: TOKEN);
+  /// Song? song = (await genius.searchSongByLyricsSnippet(
+  ///   lyricsSnippet: 'all the memories collected', getFullInfo: false));
+  ///if (song != null) {
+  ///  print(song.lyrics);
+  ///}
+  /// ```
+  /// {@end-tool}
+  Future<Song?> searchSongByLyricsSnippet(
+      {required String lyricsSnippet, bool getFullInfo = true}) async {
+    Map<String, dynamic>? response = await _httpClient.makeRequest(
+        url: searchByLyricsSnippetRoute,
+        query: {'q': lyricsSnippet},
+        headers: false);
+
+    if (response == null) {
+      return _verbosePrint('error making the request');
+    } else {
+      List<dynamic> sections = response['sections'];
+
+      Map<String, dynamic>? lyricSection =
+          firstWhereOrNull(sections, (element) => element['type'] == 'lyric');
+
+      if (lyricSection == null) {
+        return _verbosePrint('no song found');
+      } else {
+        Map<String, dynamic>? songInfo = firstWhereOrNull(lyricSection['hits'],
+            (element) => element['type'] == 'song')['result'];
+
+        return _getSongFromResponseInfo(
+            songInfo: songInfo, getFullInfo: getFullInfo);
+      }
     }
   }
 

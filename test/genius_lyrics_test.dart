@@ -118,4 +118,12 @@ void main() {
     expect(tracks.any((element) => element.artist == 'J. Cole'), equals(true));
     expect(tracks.any((element) => element.lyrics!.isNotEmpty), equals(true));
   });
+
+  test('Testing searching song by lyrics snippet',
+      timeout: const Timeout(Duration(minutes: 1)), () async {
+    Song? song = (await genius.searchSongByLyricsSnippet(
+        lyricsSnippet: 'all the memories collected', getFullInfo: true));
+
+    expect(song?.title, equals('XXX.'));
+  });
 }

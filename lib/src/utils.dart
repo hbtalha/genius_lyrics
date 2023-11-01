@@ -50,3 +50,11 @@ Future<void> saveLyricsOfMultipleSongs(
         verbose: verbose);
   }
 }
+
+dynamic firstWhereOrNull(
+    Iterable<dynamic> collection, bool Function(dynamic element) test) {
+  for (var element in collection) {
+    if (test(element)) return element;
+  }
+  return null;
+}
