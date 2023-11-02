@@ -119,11 +119,12 @@ void main() {
     expect(tracks.any((element) => element.lyrics!.isNotEmpty), equals(true));
   });
 
-  test('Testing searching song by lyrics snippet',
+  test('Testing searching songs by lyrics snippet',
       timeout: const Timeout(Duration(minutes: 1)), () async {
-    Song? song = (await genius.searchSongByLyricsSnippet(
+    List<Song>? song = (await genius.searchSongsByLyricsSnippet(
         lyricsSnippet: 'all the memories collected', getFullInfo: true));
 
-    expect(song?.title, equals('XXX.'));
+    expect(song?.any((element) => element.title?.contains('XXX.') ?? false),
+        equals(true));
   });
 }

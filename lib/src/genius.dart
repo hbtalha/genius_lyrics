@@ -1,7 +1,6 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:genius_lyrics/api/api.dart';
 import 'package:genius_lyrics/models/models.dart';
-import 'package:genius_lyrics/src/utils.dart';
 
 // ignore: constant_identifier_names
 enum SongsSorting { popularity, title, release_date }
@@ -383,13 +382,19 @@ class Genius {
     }
   }
 
-  /// Searches for a song based on the provided [lyricsSnippet] and gets its lyrics returning [Song] in case it's successful and `null` otherwise .
+  /// Searches for songs based on the provided [lyricsSnippet] and gets its lyrics returning [Song] in case it's successful and `null` otherwise.
+  ///
+  /// It will return the 10 best results but this can be change by increasing the number of results returned per page by specifying [perPage]
   ///
   ///Args:
   ///
   /// `lyricsSnippet`: snippet of the lyrics of the song you are searching.
   ///
   /// `getFullInfo` (optional): Get full info for each song (slower).
+  ///
+  /// `per_page`  (optional) specifies of results to return per request. It defaults to 10 and it can't be more than 50.
+  ///
+  /// `page` (optional) specifies the page of the results to return.
   ///
   ///Example:
   /// {@tool snippet}
@@ -403,30 +408,42 @@ class Genius {
   ///}
   /// ```
   /// {@end-tool}
-  Future<Song?> searchSongByLyricsSnippet(
-      {required String lyricsSnippet, bool getFullInfo = true}) async {
+  Future<List<Song>?> searchSongsByLyricsSnippet({
+    required String lyricsSnippet,
+    bool getFullInfo = false,
+    int perPage = 10,
+    int page = 1,
+  }) async {
     Map<String, dynamic>? response = await _httpClient.makeRequest(
-        url: searchByLyricsSnippetRoute,
-        query: {'q': lyricsSnippet},
+        url: searchSongsByLyricsSnippetRoute,
+        query: {
+          'q': lyricsSnippet,
+          'page': page.toString(),
+          'per_page': perPage.toString()
+        },
         headers: false);
 
     if (response == null) {
       return _verbosePrint('error making the request');
     } else {
-      List<dynamic> sections = response['sections'];
+      List<dynamic> hits = response['sections'][0]['hits'];
 
-      Map<String, dynamic>? lyricSection =
-          firstWhereOrNull(sections, (element) => element['type'] == 'lyric');
+      List<Song> songs = [];
 
-      if (lyricSection == null) {
-        return _verbosePrint('no song found');
-      } else {
-        Map<String, dynamic>? songInfo = firstWhereOrNull(lyricSection['hits'],
-            (element) => element['type'] == 'song')['result'];
+      List<Map<String, dynamic>> songsInfo = List.from(hits
+          .where((element) => element['type'] == 'song')
+          .map((e) => e['result']));
 
-        return _getSongFromResponseInfo(
-            songInfo: songInfo, getFullInfo: getFullInfo);
-      }
+      await Future.forEach(songsInfo, (element) async {
+        Song? song = await _getSongFromResponseInfo(
+            songInfo: element, getFullInfo: getFullInfo);
+
+        if (song != null) {
+          songs.add(song);
+        }
+      });
+
+      return songs;
     }
   }
 
