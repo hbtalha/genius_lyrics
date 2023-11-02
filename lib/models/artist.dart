@@ -136,7 +136,8 @@ class Artist {
 
       if (name != null || newSong.artist != null) {
         if (newSong.artist == name ||
-            (includeFeatures && newSong.featuredArtists.contains(name))) {
+            (includeFeatures &&
+                newSong.featuredArtists.any((artist) => artist.name == name))) {
           _songs.add(newSong);
           ++_numSongs;
           if (verbose) {
