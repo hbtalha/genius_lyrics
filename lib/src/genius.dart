@@ -266,13 +266,57 @@ class Genius {
         .join('\n');
   }
 
+  ///Gets Song by retrieving song information based on the given [songInfo] and [getFullInfo] flag.
+  ///
+  /// If the [songInfo] is null, it returns a message indicating 'No result found'.
+  /// If the 'lyrics_state' in the [songInfo] is not 'complete' and skipNonSongs is enabled, it rejects with a message.
+  ///
+  ///
+  /// Args:
+  ///
+  /// `songInfo`: a Map containing the song info, is required.
+  ///
+  /// `getFullInfo`: Get full info for the song (slower).
+  Future<Song?> _getSongFromResponseInfo(
+      {required Map<String, dynamic>? songInfo,
+      required bool getFullInfo}) async {
+    if (songInfo == null) {
+      return _verbosePrint('No result found');
+    }
+
+    if (songInfo['lyrics_state'] != 'complete' && skipNonSongs) {
+      return _verbosePrint(
+          'Specified song does not contain lyrics. Rejecting.');
+    }
+
+    int songId = songInfo['id'];
+
+    if (getFullInfo) {
+      Map<String, dynamic>? fullSongInfo = await song(songId: songId);
+
+      if (fullSongInfo != null) {
+        songInfo = fullSongInfo;
+      } else {
+        _verbosePrint('error getting full song info');
+      }
+    }
+
+    String? url = (songInfo['url']);
+
+    if (url == null) {
+      return _verbosePrint('Song url not found. Rejecting.');
+    }
+
+    return Song(songInfo: songInfo, lyrics: (await lyrics(url: url)) ?? "");
+  }
+
   /// Searches for a specific song and gets its lyrics returning [Song] in case it's successful and `null` otherwise .
   ///
   /// You must pass either a `title` or a `songId`.
   ///
-  ///title: Song title to search for.
-  ///
   ///Args:
+  ///
+  /// `title` Song title to search for.
   ///
   /// `artist` (optional): Name of the artist.
   ///
@@ -331,27 +375,75 @@ class Genius {
             'Specified song does not contain lyrics. Rejecting.');
       }
 
-      songId = songInfo['id'];
-
-      if (songId != null && getFullInfo) {
-        Map<String, dynamic>? fullSongInfo = await song(songId: songId);
-
-        if (fullSongInfo != null) {
-          songInfo = fullSongInfo;
-        } else {
-          _verbosePrint('error getting full song info');
-        }
-      }
-
-      String? url = (songInfo['url']);
-
-      if (url == null) {
-        return _verbosePrint('Song url not found. Rejecting.');
-      }
-
-      return Song(songInfo: songInfo, lyrics: (await lyrics(url: url)) ?? "");
+      return _getSongFromResponseInfo(
+          songInfo: songInfo, getFullInfo: getFullInfo);
     } catch (e) {
       return _verbosePrint('Error: ${e.toString()}');
+    }
+  }
+
+  /// Searches for songs based on the provided [lyricsSnippet] and gets its lyrics returning [Song] in case it's successful and `null` otherwise.
+  ///
+  /// It will return the 10 best results but this can be change by increasing the number of results returned per page by specifying [perPage]
+  ///
+  ///Args:
+  ///
+  /// `lyricsSnippet`: snippet of the lyrics of the song you are searching.
+  ///
+  /// `getFullInfo` (optional): Get full info for each song (slower).
+  ///
+  /// `per_page`  (optional) specifies of results to return per request. It defaults to 10 and it can't be more than 50.
+  ///
+  /// `page` (optional) specifies the page of the results to return.
+  ///
+  ///Example:
+  /// {@tool snippet}
+  ///
+  /// ```dart
+  ///Genius genius = Genius(accessToken: TOKEN);
+  /// Song? song = (await genius.searchSongByLyricsSnippet(
+  ///   lyricsSnippet: 'all the memories collected', getFullInfo: false));
+  ///if (song != null) {
+  ///  print(song.lyrics);
+  ///}
+  /// ```
+  /// {@end-tool}
+  Future<List<Song>?> searchSongsByLyricsSnippet({
+    required String lyricsSnippet,
+    bool getFullInfo = false,
+    int perPage = 10,
+    int page = 1,
+  }) async {
+    Map<String, dynamic>? response = await _httpClient.makeRequest(
+        url: searchSongsByLyricsSnippetRoute,
+        query: {
+          'q': lyricsSnippet,
+          'page': page.toString(),
+          'per_page': perPage.toString()
+        },
+        headers: false);
+
+    if (response == null) {
+      return _verbosePrint('error making the request');
+    } else {
+      List<dynamic> hits = response['sections'][0]['hits'];
+
+      List<Song> songs = [];
+
+      List<Map<String, dynamic>> songsInfo = List.from(hits
+          .where((element) => element['type'] == 'song')
+          .map((e) => e['result']));
+
+      await Future.forEach(songsInfo, (element) async {
+        Song? song = await _getSongFromResponseInfo(
+            songInfo: element, getFullInfo: getFullInfo);
+
+        if (song != null) {
+          songs.add(song);
+        }
+      });
+
+      return songs;
     }
   }
 
