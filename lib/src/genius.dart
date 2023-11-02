@@ -343,8 +343,7 @@ class Genius {
       Map<String, dynamic>? songInfo;
 
       if (songId == null && title == null) {
-        return _verbosePrint(
-            'Specified song does not contain lyrics. Rejecting.');
+        return _verbosePrint('You must pass either a `songId` or a `title`.');
       }
 
       if (songId != null) {
