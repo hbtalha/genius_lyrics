@@ -30,8 +30,12 @@ void main(List<String> args) async {
     }
   }
 
-  List<Song> hits = await genius.searchArtistMostPopularSongs(
+  List<Song>? hits = await genius.searchArtistMostPopularSongs(
       artistName: 'J. Cole', includeLyrics: true);
+
+  if (hits != null && hits.isNotEmpty) {
+    print(hits[0].title);
+  }
 
   Song? song = (await genius.searchSong(artist: 'J. Cole', title: 'KOD'));
 
