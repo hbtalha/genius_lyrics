@@ -72,6 +72,8 @@ class Song {
 
   String? get lyrics => _lyrics;
 
+  void set lyrics(String? lyrics) => _lyrics = lyrics;
+
   /// Return an [Artist] object
   ///
   /// Note that this [Artist] object does not contain any artist song

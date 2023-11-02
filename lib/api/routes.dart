@@ -5,4 +5,4 @@ const String searchAllRoute = '$_publicApiRoute/search/multi';
 const String getSongRoute = '$_apiRoute/songs';
 const String artistsRoute = '$_apiRoute/artists';
 const String albunsRoute = '$_apiRoute/albums';
-const String artistsHitsRoute = '$_apiRoute/search';
+const String searchRoute = '$_apiRoute/search';

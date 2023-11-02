@@ -126,7 +126,6 @@ class Genius {
       query: query,
       headers: false,
     );
-    // return _request(uri: 'https://genius.com/api/search/multi?q=$searchTerm');
   }
 
   ///Gets data for a specific song given is id (`songId`).
@@ -595,24 +594,39 @@ class Genius {
     return artistFound;
   }
 
+  /// return the most 10 popular's `Song` where given artist is a primary artist
   ///
-  /// return the most 10 popular's song where given artist is a primary artist
+  ///  `artistName`  primary artist name
   ///
-  Future<List<Song>> searchArtistHits({
+  /// `includeLyrics` if [true] , it will call [lyrics] to get songs lyrics, make it true only when necessary , because the function slower
+  ///
+  ///
+  Future<List<Song>> searchArtistMostPopularSongs({
     required String artistName,
+    bool includeLyrics = false,
   }) async {
     final Map<String, String> query = {'q': artistName};
 
     var artistHits = <Song>[];
 
     var response = await _httpClient.makeRequest(
-      url: artistsHitsRoute,
+      url: searchRoute,
       query: query,
     );
-    var hitsList = response?['hits'];
+    List<dynamic> hitsList = response?['hits'];
 
-    for (var hit in hitsList) {
-      artistHits.add(Song(songInfo: hit['result'], lyrics: ''));
+    hitsList = hitsList.where((hit) => hit['type'] == 'song').toList();
+
+    artistHits = hitsList
+        .map<Song>(
+          (hit) => Song(songInfo: hit['result'], lyrics: ''),
+        )
+        .toList();
+
+    if (includeLyrics) {
+      for (var song in artistHits) {
+        song.lyrics = await Genius.lyrics(url: song.url!);
+      }
     }
 
     return artistHits;
