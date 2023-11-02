@@ -10,7 +10,7 @@ class HttpClient {
   Future<Map<String, dynamic>?> makeRequest({
     required String url,
     bool headers = true,
-    Map<String, dynamic>? query,
+    Map<String, String>? query,
   }) async {
     try {
       String result = (await http.get(
@@ -33,7 +33,7 @@ class HttpClient {
 
   static Uri parseUrl(
     String url, {
-    Map<String, dynamic>? query,
+    Map<String, String>? query,
   }) {
     return Uri.parse(Uri.encodeFull(url)).replace(queryParameters: query);
   }

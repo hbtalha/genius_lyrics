@@ -118,7 +118,7 @@ class Genius {
   ///
   /// Note: This method will also return a ``top hits`` section alongside other types.
   Future<Map<String, dynamic>?> _searchAll({required String searchTerm}) async {
-    final Map<String, dynamic> query = {
+    final Map<String, String> query = {
       'q': searchTerm,
     };
     return await _httpClient.makeRequest(
@@ -143,7 +143,7 @@ class Genius {
   /// ```
   /// {@end-tool}
   Future<Map<String, dynamic>?> song({required int songId}) async {
-    Map<String, dynamic> query = {'text_format': 'plain'};
+    Map<String, String> query = {'text_format': 'plain'};
     return (await _httpClient.makeRequest(
       url: '${getSongRoute}/$songId',
       query: query,
@@ -164,7 +164,7 @@ class Genius {
   /// ```
   /// {@end-tool}
   Future<Map<String, dynamic>?> artist({required int artistId}) async {
-    Map<String, dynamic> query = {'text_format': 'plain'};
+    Map<String, String> query = {'text_format': 'plain'};
     return (await _httpClient.makeRequest(
       url: '${artistsRoute}/$artistId',
       query: query,
