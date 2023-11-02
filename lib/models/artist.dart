@@ -149,11 +149,6 @@ class Artist {
     }
   }
 
-  static List<Artist> sortArtists(List<Artist> artists) {
-    artists.sort((first, second) => first.name!.compareTo(second.name!));
-    return artists;
-  }
-
   /// Save the lyrics of all the artist songs
   ///
   ///Given the `destPath` (destination path), each song lyrics will be saved in that location with the song title as the filename

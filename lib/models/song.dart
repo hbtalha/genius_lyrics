@@ -119,26 +119,6 @@ class Song {
   /// Returns song data and this data have some fields that are not present in the [Song]
   Map<String, dynamic> get toJson => _songInfo;
 
-  ///return a list of song sorted by desired paramans
-  ///
-  ///`song` list of songs to be sorted
-  ///` sortParamns` paramns to sort song see [SortSongsParamns]
-  ///
-  static List<Song> sortHits({
-    required List<Song> songs,
-    SortSongsParamns sortParamns = SortSongsParamns.byDate,
-  }) {
-    if (sortParamns == SortSongsParamns.byDate) {
-      songs.sort((first, second) => first._title!.compareTo(second._title!));
-    } else {
-      songs.sort(
-        (first, second) => first.releaseDate.compareTo(second.releaseDate),
-      );
-    }
-
-    return songs;
-  }
-
   /// Save the lyrics of the song in a filename given by `fileName`
   ///
   /// `fileName` must have '/' as separator
@@ -155,12 +135,7 @@ class Song {
 
   DateTime? _getReleaseDate(Map<String, dynamic> json) {
     if (json['release_date'] != null) {
-      final releaseDateComponents = json['release_date'].split('-');
-      return DateTime(
-        int.parse(releaseDateComponents[0]),
-        int.parse(releaseDateComponents[1]),
-        int.parse(releaseDateComponents[2]),
-      );
+      return DateTime.parse(json['release_date']);
     } else if (json['release_date_components'] != null) {
       int year = json['release_date_components']['year'];
       int month = json['release_date_components']['month'];
