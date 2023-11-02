@@ -87,6 +87,7 @@ class Artist {
   bool? get isVerified => _isVerified;
 
   String? get name => _name;
+
   List<String> get alternateNames => _alternateNames;
 
   String? get url => _url;
@@ -97,6 +98,7 @@ class Artist {
   String? get about => _about;
 
   int get numSongs => _numSongs;
+
   SocialNetwork? get socialNetwork => _socialNetwork;
 
   ///Gets the artist's song return a [Song] in case of success and null otherwise.
