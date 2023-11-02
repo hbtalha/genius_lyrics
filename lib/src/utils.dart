@@ -44,9 +44,10 @@ Future<void> saveLyricsOfMultipleSongs(
   for (var song in songs) {
     String fileName = destPath + (song.title ?? 'lyric_${lyricNum++}') + ext;
     writeTofile(
-        fileName: fileName,
-        data: song.lyrics ?? '',
-        overwite: overwite,
-        verbose: verbose);
+      fileName: fileName,
+      data: song.lyrics ?? '',
+      overwite: overwite,
+      verbose: verbose,
+    );
   }
 }

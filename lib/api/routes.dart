@@ -6,3 +6,4 @@ const String searchSongsByLyricsSnippetRoute = '$_publicApiRoute/search/lyrics';
 const String getSongRoute = '$_apiRoute/songs';
 const String artistsRoute = '$_apiRoute/artists';
 const String albunsRoute = '$_apiRoute/albums';
+const String searchRoute = '$_apiRoute/search';

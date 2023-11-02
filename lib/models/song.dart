@@ -1,9 +1,11 @@
 import 'package:genius_lyrics/models/models.dart';
 import 'package:genius_lyrics/src/utils.dart';
 
+enum SortSongsParamns { byDate, byName }
+
 class Song {
   String? _artist;
-  final List<String> _featuredArtists = [];
+  final _featuredArtists = <Artist>[];
   String? _lyrics;
   Artist? _primaryArtist;
   Stats? _stats;
@@ -23,7 +25,7 @@ class Song {
   String? _title;
   String? _titleWithFeatured;
   String? _url;
-  String? _releaseDate;
+  DateTime? _releaseDate;
   String? _releaseDateForDisplay;
   Map<String, dynamic> _songInfo = {};
 
@@ -32,9 +34,7 @@ class Song {
     List<dynamic>? featureArtists = songInfo['featured_artists'];
     if (featureArtists != null) {
       for (var featuredArtist in featureArtists) {
-        if (featuredArtist['name'] != null) {
-          _featuredArtists.add(featuredArtist['name']);
-        }
+        _featuredArtists.add(Artist.fromJson(featuredArtist));
       }
     }
     _artist = songInfo['primary_artist']['name'];
@@ -47,7 +47,7 @@ class Song {
     _headerImageThumbnailUrl = songInfo['header_image_thumbnail_url'];
     _headerImageUrl = songInfo['header_image_url'];
     _lyricsOwnerId = songInfo['lyrics_owner_id'];
-    _releaseDate = songInfo['release_date'];
+    _releaseDate = _getReleaseDate(songInfo);
     _releaseDateForDisplay = songInfo['release_date_for_display'];
     _id = songInfo['id'];
     _lyricsState = songInfo['lyrics_state'];
@@ -63,13 +63,21 @@ class Song {
   /// Returns name of the primary artist
   String? get artist => _artist;
 
-  List<String> get featuredArtists => _featuredArtists;
+  ///
+  ///list of [Artists] that apear's on the song
+  /// this propertie doesn't include all artist properties, some infos could be null
+  /// to get all artist info use [artist] function provide on genius class
+  ///
+  List<Artist> get featuredArtists => _featuredArtists;
 
   String? get lyrics => _lyrics;
+
+  void set lyrics(String? lyrics) => _lyrics = lyrics;
 
   /// Return an [Artist] object
   ///
   /// Note that this [Artist] object does not contain any artist song
+  /// this propertie doesn't include all artist properties, some infos could be null
   Artist? get primaryArtist => _primaryArtist;
 
   Stats? get stats => _stats;
@@ -104,7 +112,7 @@ class Song {
 
   String? get url => _url;
 
-  String? get releaseDate => _releaseDate;
+  DateTime get releaseDate => _releaseDate!;
 
   String? get releaseDateForDisplay => _releaseDateForDisplay;
 
@@ -123,5 +131,18 @@ class Song {
         data: lyrics ?? '',
         overwite: overwite,
         verbose: verbose);
+  }
+
+  DateTime? _getReleaseDate(Map<String, dynamic> json) {
+    if (json['release_date'] != null) {
+      return DateTime.parse(json['release_date']);
+    } else if (json['release_date_components'] != null) {
+      int year = json['release_date_components']['year'];
+      int month = json['release_date_components']['month'];
+      int day = json['release_date_components']['day'];
+
+      return DateTime(year, month, day);
+    }
+    return null;
   }
 }

@@ -63,6 +63,12 @@ class Artist {
     _about = artistInfo['description']?['plain'];
   }
 
+  factory Artist.fromJson(Map<String, dynamic> json) {
+    return Artist(
+      artistInfo: json,
+    );
+  }
+
   /// Returns song data and this data have some fields that are not present in the [Artist]
   Map<String, dynamic> get toJson => _artistInfo;
 
