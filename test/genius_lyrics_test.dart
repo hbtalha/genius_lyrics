@@ -15,14 +15,16 @@ void main() {
     expect(song?.artist, equals('Kendrick Lamar'));
     expect(song?.title, equals('Real'));
     expect(song?.id, equals(90480));
-    expect(song?.featuredArtists, equals(['Anna Wise']));
+    expect(song?.featuredArtists.any((element) => element.name == 'Anna Wise'),
+        equals(true));
     expect(song?.lyrics?.isEmpty, equals(false));
 
     song = await genius.searchSong(artist: 'Eminem', title: 'No Love');
     expect(song?.artist, equals('Eminem'));
     expect(song?.title, equals('No Love'));
     expect(song?.id, equals(530));
-    expect(song?.featuredArtists, equals(['Lil Wayne']));
+    expect(song?.featuredArtists.any((element) => element.name == 'Lil Wayne'),
+        equals(true));
     expect(song?.lyrics?.isEmpty, equals(false));
   });
   test('Testing album search', timeout: const Timeout(Duration(minutes: 1)),
