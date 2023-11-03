@@ -692,7 +692,7 @@ class Genius {
   /// `includeLyrics` if [true] , it will call [lyrics] to get songs lyrics, make it true only when necessary , because the function slower
   ///
   ///
-  Future<List<Song>> searchArtistMostPopularSongs({
+  Future<List<Song>?> searchArtistMostPopularSongs({
     required String artistName,
     bool includeLyrics = false,
   }) async {
@@ -704,22 +704,27 @@ class Genius {
       url: searchRoute,
       query: query,
     );
-    List<dynamic> hitsList = response?['hits'];
 
-    hitsList = hitsList.where((hit) => hit['type'] == 'song').toList();
+    if (response == null) {
+      return _verbosePrint('error making the request');
+    } else {
+      List<dynamic> hitsList = response['hits'];
 
-    artistHits = hitsList
-        .map<Song>(
-          (hit) => Song(songInfo: hit['result'], lyrics: ''),
-        )
-        .toList();
+      hitsList = hitsList.where((hit) => hit['type'] == 'song').toList();
 
-    if (includeLyrics) {
-      for (var song in artistHits) {
-        song.lyrics = await Genius.lyrics(url: song.url!);
+      artistHits = hitsList
+          .map<Song>(
+            (hit) => Song(songInfo: hit['result'], lyrics: ''),
+          )
+          .toList();
+
+      if (includeLyrics) {
+        for (var song in artistHits) {
+          song.lyrics = await Genius.lyrics(url: song.url!);
+        }
       }
-    }
 
-    return artistHits;
+      return artistHits;
+    }
   }
 }
