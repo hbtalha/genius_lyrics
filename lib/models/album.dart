@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:genius_lyrics/models/models.dart';
 import 'package:genius_lyrics/src/utils.dart';
 
 class Album {
-  Map<String, dynamic> _albumInfo = {};
+  Map<String, dynamic> _raw = {};
   Artist? _artist;
   List<Song> _tracks = [];
   String? _apiPath;
@@ -14,7 +16,7 @@ class Album {
   String? _coverArtUrl;
 
   Album({required Map<String, dynamic> albumInfo, required List<Song> tracks}) {
-    _albumInfo = albumInfo;
+    _raw = albumInfo;
     _artist = Artist(artistInfo: albumInfo['artist']);
     _tracks = tracks;
     _url = albumInfo['url'];
@@ -26,7 +28,7 @@ class Album {
   }
 
   /// returns song data and this data have some fields that are not present in the [Album]
-  Map<String, dynamic> get toJson => _albumInfo;
+  Map<String, dynamic> get raw => _raw;
 
   Artist? get artist => _artist;
 
@@ -63,4 +65,20 @@ class Album {
         overwite: overwite,
         verbose: verbose);
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'artist': _artist?.toMap(),
+      'tracks': _tracks.map((x) => x.toMap()).toList(),
+      'apiPath': _apiPath,
+      'id': _id,
+      'url': _url,
+      'name': _name,
+      'fullTitle': _fullTitle,
+      'coverAartThumbnailrl': _coverAartThumbnailrl,
+      'coverArtUrl': _coverArtUrl,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 }
