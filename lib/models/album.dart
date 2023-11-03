@@ -25,7 +25,7 @@ class Album {
         _apiPath = albumInfo['api_path'],
         _coverArtThumbnailUrl = albumInfo['cover_art_thumbnail_url'];
 
-  /// Returns song data; this data has some fields that are not present in the [Album]
+  /// returns song data and this data have some fields that are not present in the [Album]
   Map<String, dynamic> get toJson => _albumInfo;
 
   Artist? get artist => _artist;
@@ -51,15 +51,21 @@ class Album {
   /// Given the `destPath` (destination path), each track's lyrics will be saved in that location with the track title as the filename.
   /// `destPath` must have '/' as separator.
   Future<void> saveLyrics(
-      {required String destPath,
-      String ext = '.lrc',
-      bool overwite = true,
-      bool verbose = true}) async {
-    saveLyricsOfMultipleSongs(
-        songs: tracks,
-        destPath: destPath,
-        ext: ext,
-        overwite: overwite,
-        verbose: verbose);
+      {required String destPath, String ext = '.lrc', bool overwite = true, bool verbose = true}) async {
+    saveLyricsOfMultipleSongs(songs: tracks, destPath: destPath, ext: ext, overwite: overwite, verbose: verbose);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'artist': _artist?.toMap(),
+      'tracks': _tracks.map((x) => x.toMap()).toList(),
+      'apiPath': _apiPath,
+      'id': _id,
+      'url': _url,
+      'name': _name,
+      'fullTitle': _fullTitle,
+      'coverArtThumbnail': _coverArtThumbnailUrl,
+      'coverArtUrl': _coverArtUrl,
+    };
   }
 }
