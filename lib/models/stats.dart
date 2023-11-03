@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Stats {
   int? _acceptedAnnotations = 0;
   int? _contributors = 0;
@@ -39,4 +41,21 @@ class Stats {
   bool? get hot => _hot;
 
   int? get pageviews => _pageviews;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'acceptedAnnotations': _acceptedAnnotations,
+      'contributors': _contributors,
+      'iqEarners': _iqEarners,
+      'transcribers': _transcribers,
+      'unreviewedAnnotations': _unreviewedAnnotations,
+      'verifiedAnnotations': _verifiedAnnotations,
+      'hot': _hot,
+      'pageviews': _pageviews,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Stats.fromJson(String source) => Stats(stats: json.decode(source));
 }
