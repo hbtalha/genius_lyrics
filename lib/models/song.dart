@@ -65,21 +65,42 @@ class Song {
   /// Returns name of the primary artist
   String? get artist => _artist;
 
+  /// Returns a list of [Artist] objects representing the artists who are featured in the song
   ///
-  ///list of [Artists] that apear's on the song
-  /// this propertie doesn't include all artist properties, some infos could be null
-  /// to get all artist info use [artist] function provide on genius class
+  /// Note that the [Artist] objects returned don't contain all the artist properties
   ///
+  ///The properties available are:
+  /// - [apiPath]
+  /// - [headerImageUrl]
+  /// - [id]
+  /// - [imageUrl]
+  /// - [isMemeVerified]
+  /// - [isVerified]
+  /// - [url]
+  /// - [name]
+  ///
+  /// To get the artists full info you could use the function [Genius.artist]
   List<Artist> get featuredArtists => _featuredArtists;
 
   String? get lyrics => _lyrics;
 
   void set lyrics(String? lyrics) => _lyrics = lyrics;
 
-  /// Return an [Artist] object
+  /// Returns an [Artist] object
   ///
-  /// Note that this [Artist] object does not contain any artist song
-  /// this propertie doesn't include all artist properties, some infos could be null
+  /// Note that the [Artist] object returned doesn't contain all the artist properties
+  ///
+  ///The properties available are:
+  /// - [apiPath]
+  /// - [headerImageUrl]
+  /// - [id]
+  /// - [imageUrl]
+  /// - [isMemeVerified]
+  /// - [isVerified]
+  /// - [url]
+  /// - [name]
+  ///
+  /// To get the artists full info you could use the function [Genius.artist]
   Artist? get primaryArtist => _primaryArtist;
 
   Stats? get stats => _stats;
