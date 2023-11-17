@@ -4,38 +4,11 @@ import 'package:genius_lyrics/models/models.dart';
 import 'package:genius_lyrics/src/genius.dart';
 import 'package:genius_lyrics/src/utils.dart';
 
-class SocialNetwork {
-  String? instagram;
-  String? facebook;
-  String? twitter;
-
-  SocialNetwork({
-    this.facebook,
-    this.twitter,
-    this.instagram,
-  });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'instagram': instagram,
-      'facebook': facebook,
-      'twitter': twitter,
-    };
-  }
-
-  factory SocialNetwork.fromMap(Map<String, dynamic> map) {
-    return SocialNetwork(
-      instagram: map['instagram_name'],
-      facebook: map['facebook_name'],
-      twitter: map['twitter_name'],
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory SocialNetwork.fromJson(String source) =>
-      SocialNetwork.fromMap(json.decode(source));
-}
+typedef SocialNetwork = ({
+  String? instagram,
+  String? facebook,
+  String? twitter
+});
 
 class Artist {
   String? _apiPath;
@@ -46,7 +19,8 @@ class Artist {
   bool? _isMemeVerified;
   bool? _isVerified;
   String? _name;
-  SocialNetwork? _socialNetwork;
+  SocialNetwork _socialNetwork =
+      (facebook: null, instagram: null, twitter: null);
   List<String> _alternateNames = [];
   String? _url;
   final List<Song> _songs = [];
@@ -66,7 +40,11 @@ class Artist {
     _name = artistInfo['name'];
     _url = artistInfo['url'];
     _alternateNames = List<String>.from(artistInfo['alternate_names'] ?? []);
-    _socialNetwork = SocialNetwork.fromMap(artistInfo);
+    _socialNetwork = (
+      facebook: artistInfo['facebook_name'],
+      instagram: artistInfo['instagram_name'],
+      twitter: artistInfo['twitter_name']
+    );
     _about = artistInfo['description']?['plain'];
   }
 
@@ -110,7 +88,7 @@ class Artist {
 
   int get numSongs => _numSongs;
 
-  SocialNetwork? get socialNetwork => _socialNetwork;
+  SocialNetwork get socialNetwork => _socialNetwork;
 
   ///Gets the artist's song return a [Song] in case of success and null otherwise.
   ///
@@ -192,7 +170,11 @@ class Artist {
       'isMemeVerified': _isMemeVerified,
       'isVerified': _isVerified,
       'name': _name,
-      'socialNetwork': _socialNetwork?.toMap(),
+      'socialNetwork': {
+        'instagram': socialNetwork.instagram,
+        'facebook': socialNetwork.facebook,
+        'twitter': socialNetwork.twitter,
+      },
       'alternateNames': _alternateNames,
       'url': _url,
       'numSongs': _numSongs,
