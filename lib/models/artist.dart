@@ -4,7 +4,11 @@ import 'package:genius_lyrics/models/models.dart';
 import 'package:genius_lyrics/src/genius.dart';
 import 'package:genius_lyrics/src/utils.dart';
 
-typedef SocialNetwork = ({String? instagram, String? facebook, String? twitter});
+typedef SocialNetwork = ({
+  String? instagram,
+  String? facebook,
+  String? twitter,
+});
 
 class Artist {
   String? _apiPath;
