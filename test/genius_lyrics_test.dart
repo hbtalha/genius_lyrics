@@ -1,8 +1,7 @@
-@Timeout(Duration(seconds: 60))
-
-import 'package:test/test.dart';
 import 'package:genius_lyrics/genius_lyrics.dart';
+import 'package:test/test.dart';
 
+@Timeout(Duration(seconds: 60))
 void main() {
   final genius = Genius(
     accessToken: const String.fromEnvironment('GENIUS_TOKEN'),
@@ -55,9 +54,9 @@ void main() {
     expect(artist?.id, equals(45));
     expect(artist?.songs.length, equals(5));
     expect(artist?.alternateNames.isNotEmpty, equals(true));
-    expect(artist?.socialNetwork?.facebook, 'Eminem');
-    expect(artist?.socialNetwork?.instagram, 'eminem');
-    expect(artist?.socialNetwork?.twitter, 'Eminem');
+    expect(artist?.socialNetwork.facebook, 'Eminem');
+    expect(artist?.socialNetwork.instagram, 'eminem');
+    expect(artist?.socialNetwork.twitter, 'Eminem');
     expect(artist?.about?.contains('\n'), true);
 
     artist =
