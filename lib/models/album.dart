@@ -22,6 +22,7 @@ class Album {
         _name = albumInfo['name'],
         _fullTitle = albumInfo['full_title'],
         _coverArtUrl = albumInfo['cover_art_url'],
+        _apiPath = albumInfo['api_path'],
         _coverArtThumbnailUrl = albumInfo['cover_art_thumbnail_url'];
 
   /// Returns song data; this data has some fields that are not present in the [Album]
