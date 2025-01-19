@@ -1,3 +1,14 @@
+## 1.1.0
+
+- Add Artist alternate names
+- Add Artist social network info
+- Add Artist description
+- Search artists hits
+- Search songs by lyrics snippet
+- Fix lyrics container selector for BeautifulSoup
+- Remove flutter sdk as dev dependency
+- Update sdk version
+
 ## 1.0.1
 
 - Remove flutter dependency
