@@ -36,6 +36,7 @@ void main() {
     expect(album?.fullTitle, equals('KOD by J. Cole'));
     expect(album?.tracks.length, equals(12));
     expect(album?.tracks.any((element) => element.title == "Kevin’s Heart"), equals(true));
+    expect(album?.tracks.any((element) => element.lyrics == null || element.lyrics!.isEmpty), equals(false));
   });
 
   test('Testing artist search', timeout: const Timeout(Duration(seconds: 90)), () async {
