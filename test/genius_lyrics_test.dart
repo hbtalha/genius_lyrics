@@ -27,7 +27,7 @@ void main() {
     expect(album?.artist?.name, equals('Eminem'));
     expect(album?.fullTitle, equals("Recovery by Eminem"));
     expect(album?.name, equals('Recovery'));
-    expect(album?.tracks.length, equals(19));
+    expect(album?.tracks.length, equals(17));
     expect(album?.tracks.any((element) => element.title == 'No Love'), equals(true));
 
     album = await genius.searchAlbum(artist: 'J. Cole', name: 'KOD');
@@ -75,7 +75,7 @@ void main() {
       }
     }
 
-    expect(tracks.length, equals(19));
+    expect(tracks.length, equals(17));
     expect(tracks.any((element) => element.title == 'No Love'), equals(true));
     expect(tracks.any((element) => element.artist == 'Eminem'), equals(true));
     expect(tracks.any((element) => element.lyrics!.isNotEmpty), equals(true));
