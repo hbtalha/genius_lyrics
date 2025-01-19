@@ -260,7 +260,7 @@ class Genius {
     BeautifulSoup bs = BeautifulSoup(responseBody.replaceAll('<br/>', '\n'));
 
     return bs
-        .findAll('div', class_: 'Lyrics__Container')
+        .findAll('div', attrs: {"data-lyrics-container": "true"})
         .map((e) => e.getText().trim())
         .join('\n');
   }
