@@ -4,11 +4,7 @@ import 'package:genius_lyrics/models/models.dart';
 import 'package:genius_lyrics/src/genius.dart';
 import 'package:genius_lyrics/src/utils.dart';
 
-typedef SocialNetwork = ({
-  String? instagram,
-  String? facebook,
-  String? twitter,
-});
+typedef SocialNetwork = ({String? instagram, String? facebook, String? twitter});
 
 class Artist {
   String? _apiPath;
@@ -47,7 +43,7 @@ class Artist {
     _about = artistInfo['description']?['plain'];
   }
 
-  factory Artist.fromJsor(Map<String, dynamic> json) {
+  factory Artist.fromJson(Map<String, dynamic> json) {
     return Artist(
       artistInfo: json,
     );
@@ -120,8 +116,7 @@ class Artist {
       }
 
       if (name != null || newSong.artist != null) {
-        if (newSong.artist == name ||
-            (includeFeatures && newSong.featuredArtists.any((artist) => artist.name == name))) {
+        if (newSong.artist == name || (includeFeatures && newSong.featuredArtists.contains(name))) {
           _songs.add(newSong);
           ++_numSongs;
           if (verbose) {
