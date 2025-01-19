@@ -57,11 +57,11 @@ void main() {
   });
 
   test('Testing getting album tracks', timeout: const Timeout(Duration(minutes: 1)), () async {
-    List<dynamic>? trakList = await genius.albumTracks(albumId: 2876, perPage: 50, page: 1);
+    List<dynamic>? trackList = await genius.albumTracks(albumId: 2876, perPage: 50, page: 1);
     List<Song> tracks = [];
 
-    if (trakList != null) {
-      for (var track in trakList) {
+    if (trackList != null) {
+      for (var track in trackList) {
         Map<String, dynamic>? songInfo = (track['song'] as Map<String, dynamic>?);
         if (songInfo != null) {
           String? songLyrics;
@@ -80,11 +80,11 @@ void main() {
     expect(tracks.any((element) => element.artist == 'Eminem'), equals(true));
     expect(tracks.any((element) => element.lyrics!.isNotEmpty), equals(true));
 
-    trakList = await genius.albumTracks(albumId: 420709, perPage: 50, page: 1);
+    trackList = await genius.albumTracks(albumId: 420709, perPage: 50, page: 1);
     tracks.clear();
 
-    if (trakList != null) {
-      for (var track in trakList) {
+    if (trackList != null) {
+      for (var track in trackList) {
         Map<String, dynamic>? songInfo = (track['song'] as Map<String, dynamic>?);
         if (songInfo != null) {
           String? songLyrics;
