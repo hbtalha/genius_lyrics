@@ -4,7 +4,11 @@ import 'package:genius_lyrics/models/models.dart';
 import 'package:genius_lyrics/src/genius.dart';
 import 'package:genius_lyrics/src/utils.dart';
 
-typedef SocialNetwork = ({String? instagram, String? facebook, String? twitter});
+typedef SocialNetwork = ({
+  String? instagram,
+  String? facebook,
+  String? twitter
+});
 
 class Artist {
   String? _apiPath;
@@ -15,7 +19,8 @@ class Artist {
   bool? _isMemeVerified;
   bool? _isVerified;
   String? _name;
-  SocialNetwork _socialNetwork = (facebook: null, instagram: null, twitter: null);
+  SocialNetwork _socialNetwork =
+      (facebook: null, instagram: null, twitter: null);
   List<String> _alternateNames = [];
   String? _url;
   final List<Song> _songs = [];
@@ -107,7 +112,10 @@ class Artist {
   /// This method adds a new song to the artist object. It checks if the song is already in artist's songs
   /// and whether the song's artist is the same as the `Artist` object.
 
-  void addSong({required Song newSong, bool verbose = true, bool includeFeatures = false}) {
+  void addSong(
+      {required Song newSong,
+      bool verbose = true,
+      bool includeFeatures = false}) {
     if (newSong.title != null) {
       if (_songs.any((element) => element.title! == newSong.title)) {
         if (verbose) {
@@ -116,7 +124,8 @@ class Artist {
       }
 
       if (name != null || newSong.artist != null) {
-        if (newSong.artist == name || (includeFeatures && newSong.featuredArtists.contains(name))) {
+        if (newSong.artist == name ||
+            (includeFeatures && newSong.featuredArtists.contains(name))) {
           _songs.add(newSong);
           ++_numSongs;
           if (verbose) {
@@ -137,7 +146,10 @@ class Artist {
   ///
   ///`destPath` must have '/' as separator
   Future<void> saveLyrics(
-      {required String destPath, String ext = '.lrc', bool overwite = true, bool verbose = true}) async {
+      {required String destPath,
+      String ext = '.lrc',
+      bool overwite = true,
+      bool verbose = true}) async {
     saveLyricsOfMultipleSongs(
       songs: songs,
       destPath: destPath,
