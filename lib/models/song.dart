@@ -10,6 +10,7 @@ class Song {
   final _featuredArtists = <Artist>[];
   String? _lyrics;
   Artist? _primaryArtist;
+  List<Artist>? _primaryArtists;
   Stats? _stats;
 
   int? _annotationCount;
@@ -41,7 +42,8 @@ class Song {
     }
     _artist = songInfo['primary_artist']['name'];
     _lyrics = lyrics;
-    _primaryArtist = Artist(artistInfo: songInfo['primary_artist']);
+    _primaryArtist = Artist(artistInfo: songInfo['primary_artists'][0]);
+    _primaryArtists = List.from(songInfo['primary_artists']).map((el) => Artist(artistInfo: el)).toList();
     _stats = Stats(stats: songInfo['stats']);
     _annotationCount = songInfo['annotation_count'];
     _apiPath = songInfo['api_path'];
@@ -102,6 +104,8 @@ class Song {
   ///
   /// To get the artists full info you could use the function [Genius.artist]
   Artist? get primaryArtist => _primaryArtist;
+
+  List<Artist>? get primaryArtists => _primaryArtists;
 
   Stats? get stats => _stats;
 
