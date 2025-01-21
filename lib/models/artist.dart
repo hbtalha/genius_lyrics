@@ -1,34 +1,14 @@
+import 'dart:convert';
+
 import 'package:genius_lyrics/models/models.dart';
 import 'package:genius_lyrics/src/genius.dart';
 import 'package:genius_lyrics/src/utils.dart';
 
-class SocialNetwork {
-  String? instagram;
-  String? facebook;
-  String? twitter;
-
-  SocialNetwork({
-    this.facebook,
-    this.twitter,
-    this.instagram,
-  });
-
-  factory SocialNetwork.fromJson(Map<String, dynamic> json) {
-    return SocialNetwork(
-      instagram: json['instagram_name'],
-      facebook: json['facebook_name'],
-      twitter: json['twitter_name'],
-    );
-  }
-
-  Map<String, String?> toJson() {
-    return {
-      'instagram': instagram,
-      'facebook': facebook,
-      'twitter': twitter,
-    };
-  }
-}
+typedef SocialNetwork = ({
+  String? instagram,
+  String? facebook,
+  String? twitter
+});
 
 class Artist {
   String? _apiPath;
@@ -39,16 +19,17 @@ class Artist {
   bool? _isMemeVerified;
   bool? _isVerified;
   String? _name;
-  SocialNetwork? _socialNetwork;
+  SocialNetwork _socialNetwork =
+      (facebook: null, instagram: null, twitter: null);
   List<String> _alternateNames = [];
   String? _url;
   final List<Song> _songs = [];
   int _numSongs = 0;
-  Map<String, dynamic> _artistInfo = {};
+  Map<String, dynamic> _raw = {};
   String? _about;
 
   Artist({required Map<String, dynamic> artistInfo}) {
-    _artistInfo = artistInfo;
+    _raw = artistInfo;
     _apiPath = artistInfo['api_path'];
     _headerImageUrl = artistInfo['header_image_url'];
     _imageUrl = artistInfo['image_url'];
@@ -59,7 +40,11 @@ class Artist {
     _name = artistInfo['name'];
     _url = artistInfo['url'];
     _alternateNames = List<String>.from(artistInfo['alternate_names'] ?? []);
-    _socialNetwork = SocialNetwork.fromJson(artistInfo);
+    _socialNetwork = (
+      facebook: artistInfo['facebook_name'],
+      instagram: artistInfo['instagram_name'],
+      twitter: artistInfo['twitter_name']
+    );
     _about = artistInfo['description']?['plain'];
   }
 
@@ -69,8 +54,12 @@ class Artist {
     );
   }
 
+  factory Artist.fromMap(Map<String, dynamic> map) {
+    return Artist(artistInfo: map);
+  }
+
   /// Returns song data and this data have some fields that are not present in the [Artist]
-  Map<String, dynamic> get toJson => _artistInfo;
+  Map<String, dynamic> get raw => _raw;
 
   String? get apiPath => _apiPath;
 
@@ -87,6 +76,7 @@ class Artist {
   bool? get isVerified => _isVerified;
 
   String? get name => _name;
+
   List<String> get alternateNames => _alternateNames;
 
   String? get url => _url;
@@ -97,7 +87,8 @@ class Artist {
   String? get about => _about;
 
   int get numSongs => _numSongs;
-  SocialNetwork? get socialNetwork => _socialNetwork;
+
+  SocialNetwork get socialNetwork => _socialNetwork;
 
   ///Gets the artist's song return a [Song] in case of success and null otherwise.
   ///
@@ -167,4 +158,30 @@ class Artist {
       verbose: verbose,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'apiPath': _apiPath,
+      'headerImageUrl': _headerImageUrl,
+      'imageUrl': _imageUrl,
+      'id': _id,
+      'iq': _iq,
+      'isMemeVerified': _isMemeVerified,
+      'isVerified': _isVerified,
+      'name': _name,
+      'socialNetwork': {
+        'instagram': socialNetwork.instagram,
+        'facebook': socialNetwork.facebook,
+        'twitter': socialNetwork.twitter,
+      },
+      'alternateNames': _alternateNames,
+      'url': _url,
+      'numSongs': _numSongs,
+      'about': _about,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
+
+  // factory Artist.fromJson(String source) => Artist.fromMap(json.decode(source));
 }
